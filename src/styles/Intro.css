@@ -1,0 +1,61 @@
+.intro-root {
+  min-height: calc(100vh - 65px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background:#FFF;
+}
+
+.intro-logo {
+  font-family: 'Montserrat', 'Pretendard', sans-serif;
+  font-weight: 800;
+  font-size: 3rem;
+  color: #67509C;
+  margin-bottom: 1rem;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  animation: fadeIn 1.2s forwards;
+}
+
+.intro-desc {
+  color: #564877;
+  font-size: 1.2rem;
+  margin-bottom: 2.5rem;
+  opacity: 0;
+  animation: fadeIn 1.2s 0.3s forwards;
+}
+
+.intro-btn-group {
+  display: flex;
+  gap: 1rem;
+  opacity: 0;
+  animation: slideUp 1s 0.7s forwards;
+}
+
+.intro-btn {
+  padding: 0.9rem 2.2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 2rem;
+  border: none;
+  background: #67509C;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(26,35,126,0.08);
+  transition: background 0.2s, color 0.2s;
+}
+
+.intro-btn.signup {
+  background: #fff;
+  color: #67509C;
+  border: 2px solid #67509C;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}

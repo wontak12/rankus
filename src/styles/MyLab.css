@@ -1,0 +1,118 @@
+.mylab-root {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+.mylab-title {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #67509C;
+  margin-bottom: 1.2rem;
+}
+.mylab-desc {
+  color: #241731;
+  font-size: 1.1rem;
+}
+.mylab-join-btn {
+  background: #67509C;
+  color: #fff;
+  font-size: 1.08rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.8rem 2.2rem;
+  margin-top: 2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.mylab-join-btn:hover {
+  background: #987dd6;
+}
+
+/* MyLab 메인 컨테이너 및 카드형 UI */
+.mylab-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 2rem 1.5rem;
+}
+.mylab-header-card {
+  display: flex;
+  gap: 2.2rem;
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.07);
+  padding: 2.2rem 2rem 2rem 2rem;
+  margin-bottom: 2.5rem;
+  align-items: center;
+}
+.mylab-header-img {
+  width: 120px;
+  height: 120px;
+  background: #f5f1ff;
+  border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.mylab-header-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mylab-header-img-placeholder {
+  color: #b6c6e3;
+  font-size: 1.1rem;
+}
+.mylab-header-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.mylab-header-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #241731;;
+}
+.mylab-header-prof {
+  color: #241731;
+  font-size: 1.08rem;
+}
+.mylab-header-desc {
+  color: #241731;
+  font-size: 1.05rem;
+}
+.mylab-header-date {
+  color: #241731;
+  font-size: 0.98rem;
+}
+
+.mylab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+  gap: 2rem 1.5rem;
+}
+.mylab-card {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.07);
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+}
+.mylab-card-title {
+  font-size: 1.13rem;
+  font-weight: 800;
+  color: #241731;;
+  margin-bottom: 0.7rem;
+}
+.mylab-card-content {
+  color: #241731;
+  font-size: 1.02rem;
+  flex: 1;
+}

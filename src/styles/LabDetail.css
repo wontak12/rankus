@@ -1,0 +1,82 @@
+.labdetail-root {
+  max-width: 800px;
+  margin: 2.5rem auto;
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.07);
+  padding: 2.5rem 2rem 2rem 2rem;
+}
+.labdetail-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #241731;
+  margin-bottom: 1.2rem;
+  letter-spacing: 0.03em;
+}
+.labdetail-meta {
+  color: #000000D9;
+  font-size: 1rem;
+  margin-bottom: 1.2rem;
+  display: flex;
+  gap: 1.5rem;
+}
+.labdetail-image {
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+  border-radius: 0.7rem;
+  margin-bottom: 1.5rem;
+  background: #e3f0ff;
+  display: block;
+}
+.labdetail-content {
+  font-size: 1.13rem;
+  color: #000000D9;
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+.labdetail-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.labdetail-join-btn {
+  background: #67509C;
+  color: #fff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 2rem;
+  padding: 0.7rem 2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.labdetail-join-btn:hover {
+  background: #283593;
+}
+.labdetail-edit-btn, .labdetail-delete-btn {
+  background: #e3f0ff;
+  color: #1a237e;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border: 2px solid #1a237e;
+  border-radius: 2rem;
+  padding: 0.7rem 1.5rem;
+  cursor: pointer;
+  margin-left: 0.5rem;
+  transition: background 0.2s, color 0.2s;
+}
+.labdetail-edit-btn:hover, .labdetail-delete-btn:hover {
+  background: #1a237e;
+  color: #fff;
+}
+.labdetail-likes {
+  color: #e53935;
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-left: 0.5rem;
+}
+.labdetail-comments {
+  margin-top: 2.5rem;
+}
