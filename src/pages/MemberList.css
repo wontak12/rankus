@@ -1,0 +1,64 @@
+.member-manage-root {
+  max-width: 900px;
+  margin: 2.5rem auto;
+  background: #fff;
+  border-radius: 0.8rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 2.4rem 2rem 2.4rem 2rem;
+}
+.member-manage-tabs {
+  display: flex;
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+.tab {
+  background: #f5f7fa;
+  border: none;
+  border-radius: 0.5rem 0.5rem 0 0;
+  padding: 0.8rem 2.2rem;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #1976d2;
+  cursor: pointer;
+  outline: none;
+  transition: background 0.2s;
+}
+.tab.active {
+  background: #fff;
+  border-bottom: 2px solid #1976d2;
+  color: #1976d2;
+}
+.member-manage-table-wrap {
+  overflow-x: auto;
+}
+.member-manage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1.15rem;
+  background: #fff;
+}
+.member-manage-table th, .member-manage-table td {
+  border: 1px solid #e0e0e0;
+  padding: 0.7rem 0.9rem;
+  text-align: center;
+}
+.member-manage-table th {
+  background: #f5f7fa;
+  font-weight: 700;
+}
+.member-row:hover {
+  background: #f0f6ff;
+}
+.detail-btn {
+  background: #1976d2;
+  color: #fff;
+  border: none;
+  border-radius: 0.4rem;
+  padding: 0.4rem 1.1rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.detail-btn:hover {
+  background: #1256a3;
+}

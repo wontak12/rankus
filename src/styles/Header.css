@@ -1,7 +1,7 @@
 .rankus-header {
   width: 100%;
   background: #fff;
-  box-shadow: 0 2px 8px rgba(26,35,126,0.07);
+  box-shadow: 0 2px 8px rgba(26, 35, 126, 0.07);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -18,15 +18,14 @@
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
 }
 
 .rankus-header-logo-text {
-  font-family: 'Montserrat', 'Pretendard', sans-serif;
+  font-family: "Montserrat", "Pretendard", sans-serif;
   font-weight: 900;
   font-size: 1.5rem;
   letter-spacing: 0.08em;
-  color: #67509C;
+  color: #67509c;
   border-radius: 0.7rem;
   padding: 0.2rem 1.1rem;
   margin-right: 0.7rem;
@@ -59,7 +58,7 @@
   background: #fff;
   border-radius: 1.2rem;
   padding: 0.18rem 1.1rem;
-  box-shadow: 0 1px 4px rgba(26,35,126,0.07);
+  box-shadow: 0 1px 4px rgba(26, 35, 126, 0.07);
   transition: background 0.18s, color 0.18s;
 }
 
@@ -68,7 +67,7 @@
 }
 
 .rankus-header-profile-name {
-  color: #241731;;
+  color: #241731;
   font-weight: 700;
   font-size: 1.08rem;
   letter-spacing: 0.01em;
@@ -85,14 +84,14 @@
 }
 
 .rankus-header-logout-btn {
-  background: #67509C;
+  background: #67509c;
   color: #fff;
   font-size: 1.02rem;
   font-weight: 700;
   border: none;
   border-radius: 1.2rem;
   padding: 0.18rem 1.1rem;
-  box-shadow: 0 1px 4px rgba(26,35,126,0.07);
+  box-shadow: 0 1px 4px rgba(26, 35, 126, 0.07);
   cursor: pointer;
   transition: background 0.18s, color 0.18s;
   margin-left: 0.2rem;

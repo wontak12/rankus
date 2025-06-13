@@ -25,7 +25,6 @@
   padding: 0;
   margin: 0;
   width: 100%;
-  
 }
 
 .sidebar-nav li a {
@@ -33,24 +32,23 @@
   align-items: center;
   gap: 12px;
   padding: 12px 20px;
-  color: #000000D9;
+  color: #000000d9;
   text-decoration: none;
   font-size: 16px;
   transition: background 0.3s, color 0.3s;
-      height: 2rem;
+  height: 2rem;
 }
 
 .sidebar-nav li a:hover {
-  background: #67509C;
-  color: #fff
+  background: #67509c;
+  color: #fff;
 }
 
 .sidebar-nav li a.active {
-  background: #67509C;
-  color: #fff
+  background: #67509c;
+  color: #fff;
 }
 
 .icon {
   font-size: 18px;
 }
-

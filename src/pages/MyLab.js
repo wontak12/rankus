@@ -5,8 +5,11 @@ import '../styles/MyLab.css';
 import HeaderSection from '../components/mylab/HeaderSection';
 import CalendarSection from '../components/mylab/CalendarSection';
 import VoteSection from '../components/mylab/VoteSection';
+import VotePreview from '../components/mylab/VotePreview';
 import NoticeSection from '../components/mylab/NoticeSection';
+import NoticePreview from '../components/mylab/NoticePreview';
 import FileSection from '../components/mylab/FileSection';
+import FilePreview from '../components/mylab/FilePreview';
 import MemberSection from '../components/mylab/MemberSection';
 
 function MyLab() {
@@ -32,9 +35,9 @@ function MyLab() {
       {/* 기능 섹션들 */}
       <div className="mylab-grid">
         <CalendarSection labId={lab.id} />
-        <VoteSection labId={lab.id} />
-        <NoticeSection labId={lab.id} />
-        <FileSection labId={lab.id} />
+        <VotePreview />
+        <NoticePreview />
+        <FilePreview />
         <MemberSection labId={lab.id} />
       </div>
     </div>

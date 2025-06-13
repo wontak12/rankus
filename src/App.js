@@ -1,3 +1,4 @@
+import FilePage from './pages/FilePage.js';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login.js';
 import Signup from './pages/Signup.js';
@@ -11,8 +12,17 @@ import MyLab from './pages/MyLab.js';
 import Layout from './components/Layout.js';
 import Profile from './pages/Profile.js';
 import NoLab from './pages/NoLab.js';
+
 import { useAuth } from './contexts/AuthContext';
 import JoinLab from './pages/JoinLab.js';
+import Vote from './pages/Vote.js';
+import VotePage from './pages/VotePage.js';
+import NoticePage from './pages/NoticePage.js';
+import NoticeForm from './pages/NoticeForm.js';
+import NoticeDetail from './pages/NoticeDetail.js';
+import MemberList from './pages/MemberList.js';
+import JoinRequestsPage from './pages/JoinRequestsPage.js';
+import MemberDetail from './pages/MemberDetail.js';
 
 function App() {
   const { user } = useAuth();
@@ -37,6 +47,14 @@ function App() {
           <Route path="/my-lab" element={<MyLab />} />
           <Route path="/my-lab/no-lab" element={<NoLab />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/vote" element={<VotePage />} />
+          <Route path="/file" element={<FilePage />} />
+          <Route path="/notice" element={<NoticePage />} />
+          <Route path="/notice/create" element={<NoticeForm />} />
+          <Route path="/notice/:id" element={<NoticeDetail />} />
+          <Route path="/members" element={<MemberList />} />
+          <Route path="/member/:id" element={<MemberDetail />} />
+          <Route path="/join-requests" element={<JoinRequestsPage />} />
         </Route>
       </Routes>
     </Router>

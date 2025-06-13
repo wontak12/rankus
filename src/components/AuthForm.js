@@ -30,8 +30,8 @@ function AuthForm({ mode, setUser }) {
         // 성공 시 랩실 가입 여부 확인 후 라우팅
         // 임시 로직 (실제 API 연동 필요)
         if (fields.email === 'test2@hs.ac.kr' && fields.password === '1234') {
-          // AI 연구실 가입된 계정
-          if (setUser) setUser({ name: '신현재', email: 'test2@hs.ac.kr', joinedLab: {
+          // AI 연구실 가입된 계정 + 관리자 권한
+          if (setUser) setUser({ name: '신현재', email: 'test2@hs.ac.kr', role: 'admin', joinedLab: {
             id: 1,
             title: 'AI 연구실',
             professor: '김한신',

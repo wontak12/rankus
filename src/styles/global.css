@@ -1,13 +1,16 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
   background-color: #f8f9fc;
   color: #212529;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: inherit;
 }
 
@@ -39,7 +42,9 @@ button:hover {
   background-color: #0041cc;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   width: 100%;
   padding: 0.6rem;
   margin-top: 0.5rem;

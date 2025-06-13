@@ -1,0 +1,111 @@
+/* VoteSection 전용 스타일 */
+.vote-section-container {
+  background: #fff;
+  border-radius: 1.2rem;
+  box-shadow: 0 2px 12px rgba(26,35,126,0.07);
+  padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+  margin-bottom: 1.5rem;
+}
+.vote-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #67509C;
+  margin-bottom: 1.2rem;
+}
+.vote-admin-area {
+  margin-bottom: 1.2rem;
+}
+.vote-new-btn {
+  background: #67509C;
+  color: #fff;
+  font-size: 1.02rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 1.2rem;
+  padding: 0.18rem 1.1rem;
+  box-shadow: 0 1px 4px rgba(26, 35, 126, 0.07);
+  cursor: pointer;
+  margin-bottom: 0.7rem;
+}
+.vote-new-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.vote-new-form input {
+  width: 140px;
+  font-size: 0.98rem;
+}
+.vote-poll-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.vote-poll-card {
+  background: #f8f9fc;
+  border-radius: 1.1rem;
+  box-shadow: 0 1px 4px rgba(26,35,126,0.04);
+  padding: 1.1rem 1rem 1rem 1rem;
+}
+.vote-poll-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.7rem;
+}
+.vote-deadline {
+  font-size: 0.95rem;
+  color: #b6c6e3;
+}
+.vote-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.vote-option-row {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.2rem;
+}
+.vote-option-row.selected .vote-option-btn {
+  background: #67509C;
+  color: #fff;
+}
+.vote-option-btn {
+  background: #fff;
+  color: #67509C;
+  border: 1.5px solid #b6c6e3;
+  border-radius: 1.2rem;
+  padding: 0.18rem 1.1rem;
+  font-size: 1.02rem;
+  font-weight: 700;
+  cursor: pointer;
+  min-width: 90px;
+  transition: background 0.18s, color 0.18s;
+}
+.vote-option-btn:disabled {
+  background: #e3f0ff;
+  color: #b6c6e3;
+  cursor: not-allowed;
+}
+.vote-progress-bar {
+  flex: 1;
+  height: 16px;
+  background: #e3f0ff;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 0 0.5rem;
+}
+.vote-progress {
+  height: 100%;
+  background: #67509C;
+  border-radius: 8px;
+  transition: width 0.3s;
+}
+.vote-percent {
+  font-size: 0.98rem;
+  color: #67509C;
+  min-width: 70px;
+  text-align: right;
+}
