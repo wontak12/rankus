@@ -7,37 +7,46 @@ import LikeButton from '../components/LikeButton';
 function LabDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  // TODO: 실제 API 연동 (GET /api/labs/:id)
   const [lab, setLab] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [isOwner, setIsOwner] = useState(false); // 작성자 여부
-  const [joined, setJoined] = useState(false); // 랩실 가입 여부
+  const [isOwner, setIsOwner] = useState(false);
+  const [joined, setJoined] = useState(false);
   const [likes, setLikes] = useState(0);
   const [liked, setLiked] = useState(false);
   const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    // 임시 더미 데이터
-    setTimeout(() => {
-      setLab({
-        id,
-        title: 'AI 연구실',
-        content: '인공지능 및 데이터 분석을 연구하는 랩실입니다. 다양한 프로젝트와 논문 연구를 진행합니다.',
-        image: '',
-        author: '홍길동',
-        createdAt: '2025-06-13',
-        professor: '김한신',
-        likes: 12,
+    fetch(`http://3.34.229.56:8080/api/labs/${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 200 && data.data) {
+          setLab({
+            id: data.data.id,
+            title: data.data.name,
+            content: data.data.description,
+            image: '', // API에 이미지 필드가 없으므로 빈 값
+            author: '', // API에 작성자 정보가 없으므로 빈 값
+            createdAt: new Date(data.timestamp).toLocaleDateString('ko-KR', {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+            }),
+            professor: '', // API에 교수 정보가 없으므로 빈 값
+            likes: data.data.ranking ?? 0,
+          });
+          setLikes(data.data.ranking ?? 0);
+        } else {
+          setLab(null);
+        }
+        setIsOwner(false);
+        setJoined(false);
+        setComments([]);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLab(null);
+        setLoading(false);
       });
-      setLikes(12);
-      setIsOwner(false); // TODO: 실제 로그인 유저와 비교
-      setJoined(false); // TODO: 실제 가입 여부 확인
-      setComments([
-        { id: 1, author: '이순신', content: '좋은 연구 기대합니다!', createdAt: '2025-06-13' },
-        { id: 2, author: '유관순', content: '참여하고 싶어요!', createdAt: '2025-06-13' },
-      ]);
-      setLoading(false);
-    }, 500);
   }, [id]);
 
   if (loading || !lab) return <div className="labdetail-root">로딩 중...</div>;
@@ -46,8 +55,8 @@ function LabDetail() {
     <div className="labdetail-root">
       <div className="labdetail-title">{lab.title}</div>
       <div className="labdetail-meta">
-        <span>작성자: {lab.author}</span>
-        <span>교수: {lab.professor}</span>
+        <span>작성자: {lab.author || '정보 없음'}</span>
+        <span>교수: {lab.professor || '정보 없음'}</span>
         <span>작성일: {lab.createdAt}</span>
       </div>
       {lab.image ? (

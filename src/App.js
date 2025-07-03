@@ -32,7 +32,7 @@ function App() {
   const headerUser = isAuthPage ? null : user;
   return (
     <Router>
-      <Header user={headerUser} />
+      <Header />
       <Routes>
         <Route path="/" element={<Intro />} />
         <Route path="/login" element={<Login />} />

@@ -1,5 +1,6 @@
+// src/pages/Signup.js
 import React from 'react';
-import AuthForm from '../components/AuthForm.js';
+import AuthForm from '../components/AuthForm';
 
 function Signup() {
   return (

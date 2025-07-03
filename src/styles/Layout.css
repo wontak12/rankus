@@ -10,6 +10,7 @@
   min-height: 0;
 }
 .layout-content {
+  margin-left: 220px;
   flex: 1;
   min-width: 0;
   text-align: center;

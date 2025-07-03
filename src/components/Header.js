@@ -1,15 +1,18 @@
+// src/components/Header.js
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import '../styles/Header.css';
 
-// 실제로는 Context, Redux, 또는 props로 유저 정보를 받아야 함
-function Header({ user }) {
+function Header() {
   const navigate = useNavigate();
   const location = useLocation();
-  const auth = useAuth();
-  const isMainOrAuth = location.pathname === '/' || location.pathname === '/login' || location.pathname === '/signup';
-  const displayUser = user || auth.user;
+  const { user, setUser } = useAuth();
+  const isAuthPage = ['/', '/login', '/signup'].includes(location.pathname);
+
+  // username 디버깅용 로그
+  console.log('🛠️ Debug Username:', user?.name);
+
   return (
     <header className="rankus-header">
       <div className="rankus-header-inner">
@@ -19,17 +22,22 @@ function Header({ user }) {
         >
           RANKUS
         </span>
-        <span className="rankus-header-desc"></span>
-        {displayUser && !isMainOrAuth && (
+
+        {user && !isAuthPage && (
           <div className="rankus-header-profile-group">
-            <div className="rankus-header-profile" onClick={() => navigate('/profile')}>
-              <span className="rankus-header-profile-name">{displayUser.name}</span>
+            <div
+              className="rankus-header-profile"
+              onClick={() => navigate('/profile')}
+            >
+              <span className="rankus-header-profile-name">
+                {user.name}
+              </span>
             </div>
             <button
               className="rankus-header-logout-btn"
               onClick={() => {
-                auth.setUser(null);
-                navigate('/');
+                setUser(null);
+                navigate('/login');
               }}
             >
               로그아웃

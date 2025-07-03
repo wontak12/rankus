@@ -9,31 +9,25 @@ function LabPromo() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // TODO: 실제 API 연동 (GET /api/labs)
-    // 임시 더미 데이터
-    setTimeout(() => {
-      setLabs([
-        {
-          id: 1,
-          title: 'AI 연구실',
-          description: '인공지능 및 데이터 분석 연구',
-          image: '',
-          professor: '홍길동',
-          createdAt: '2024-06-01',
-          likes: 12,
-        },
-        {
-          id: 2,
-          title: 'IoT 랩',
-          description: '사물인터넷 기반 융합 연구',
-          image: '',
-          professor: '이순신',
-          createdAt: '2024-05-20',
-          likes: 8,
-        },
-      ]);
-      setLoading(false);
-    }, 600);
+    fetch('http://3.34.229.56:8080/api/labs')
+      .then(res => res.json())
+      .then(data => {
+        // data.data가 배열이 아닐 수도 있으니 배열로 변환
+        if (data.status === 200 && data.data) {
+          if (Array.isArray(data.data)) {
+            setLabs(data.data);
+          } else {
+            setLabs([data.data]);
+          }
+        } else {
+          setLabs([]);
+        }
+        setLoading(false);
+      })
+      .catch(() => {
+        setLabs([]);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -52,7 +46,15 @@ function LabPromo() {
         <div className="labpromo-grid">
           {labs.map(lab => (
             <div key={lab.id} onClick={() => navigate(`/lab/${lab.id}`)} style={{ cursor: 'pointer' }}>
-              <LabCard {...lab} />
+              <LabCard
+                id={lab.id}
+                title={lab.name}
+                description={lab.description}
+                image={lab.image} // image 필드가 없으면 imageUrl 등 실제 필드명으로 수정
+                professor={lab.professor}
+                createdAt={lab.timestamp}
+                likes={lab.ranking}
+              />
             </div>
           ))}
         </div>
