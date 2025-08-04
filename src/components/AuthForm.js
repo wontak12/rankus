@@ -1,12 +1,15 @@
+// src/components/AuthForm.js
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api"; // ✅ axios 인스턴스 import
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/AuthForm.css";
 
-function AuthForm({ mode }) {
+const BASE_URL = "http://3.34.229.56:8080";
+
+export default function AuthForm({ mode }) {
 	const navigate = useNavigate();
 	const { setUser } = useAuth();
+	const isLogin = mode === "login";
 
 	const [fields, setFields] = useState({
 		name: "",
@@ -18,7 +21,6 @@ function AuthForm({ mode }) {
 		grade: "",
 		enrollmentStatus: "ENROLLED",
 	});
-
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 
@@ -33,58 +35,47 @@ function AuthForm({ mode }) {
 		setLoading(true);
 
 		try {
-			console.log("📤 제출된 필드 값:", fields);
-
-			if (mode === "login") {
+			if (isLogin) {
+				// ▶ 로그인
 				const { email, password } = fields;
-
 				if (!email || !password) {
-					setError("이메일과 비밀번호를 입력하세요.");
-					setLoading(false);
-					return;
+					throw new Error("이메일과 비밀번호를 입력하세요.");
 				}
 
-				const res = await api.post(
-					"/api/auth/login/v2",
-					{ email, password },
-					{ headers: { "Content-Type": "application/json" } }
+				const payload = { email, password };
+				console.log("[AuthForm] 로그인 요청 페이로드:", payload);
+
+				const res = await fetch(`${BASE_URL}/api/auth/login/v2`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(payload),
+				});
+				const json = await res.json();
+				console.log(`[AuthForm] 로그인 HTTP ${res.status}`, json);
+
+				if (!res.ok) {
+					throw new Error(json.message || "로그인 실패");
+				}
+
+				// ▶ 토큰 저장
+				localStorage.setItem("accessToken", json.data.accessToken);
+				localStorage.setItem("refreshToken", json.data.refreshToken);
+				console.log(
+					"[AuthForm] 저장된 accessToken:",
+					localStorage.getItem("accessToken")
+				);
+				console.log(
+					"[AuthForm] 저장된 refreshToken:",
+					localStorage.getItem("refreshToken")
 				);
 
-				console.log("✅ 로그인 응답:", res.data);
+				// ▶ 유저 컨텍스트 저장
+				console.log("[AuthForm] setUser 호출, user 정보:", json.data.user);
+				setUser(json.data.user);
 
-				if (res.status === 200) {
-					const { accessToken, refreshToken, data } = res.data.data;
-
-					console.log("✅ 로그인 응답 토큰 확인:", accessToken, refreshToken);
-
-					const apiUser = data?.user ?? {
-						name: data?.name,
-						email: data?.email,
-					};
-
-					setUser(apiUser);
-
-					try {
-						localStorage.setItem("accessToken", accessToken);
-						localStorage.setItem("refreshToken", refreshToken);
-
-						console.log(
-							"📦 저장된 accessToken:",
-							localStorage.getItem("accessToken")
-						);
-						console.log(
-							"📦 저장된 refreshToken:",
-							localStorage.getItem("refreshToken")
-						);
-					} catch (e) {
-						console.error("❌ localStorage 저장 오류:", e);
-					}
-
-					navigate("/home");
-				} else {
-					setError(res.data.message || "로그인에 실패했습니다.");
-				}
+				navigate("/home");
 			} else {
+				// ▶ 회원가입
 				const {
 					name,
 					email,
@@ -103,30 +94,18 @@ function AuthForm({ mode }) {
 					!confirm ||
 					!studentNumber ||
 					!phoneNumber ||
-					!grade ||
-					!enrollmentStatus
+					!grade
 				) {
-					setError("모든 필드를 입력하세요.");
-					setLoading(false);
-					return;
+					throw new Error("모든 필드를 입력하세요.");
 				}
-
 				if (password.length < 8) {
-					setError("비밀번호는 8자 이상이어야 합니다.");
-					setLoading(false);
-					return;
+					throw new Error("비밀번호는 8자 이상이어야 합니다.");
 				}
-
 				if (password !== confirm) {
-					setError("비밀번호가 일치하지 않습니다.");
-					setLoading(false);
-					return;
+					throw new Error("비밀번호가 일치하지 않습니다.");
 				}
-
 				if (!/^\d{8,20}$/.test(studentNumber)) {
-					setError("학번은 8~20자리 숫자여야 합니다.");
-					setLoading(false);
-					return;
+					throw new Error("학번은 8~20자리 숫자여야 합니다.");
 				}
 
 				const payload = {
@@ -138,33 +117,25 @@ function AuthForm({ mode }) {
 					grade: Number(grade),
 					enrollmentStatus,
 				};
+				console.log("[AuthForm] 회원가입 요청 페이로드:", payload);
 
-				console.log("📤 회원가입 요청 바디:", payload);
-
-				const res = await api.post("/api/auth/signup", payload, {
-					headers: {
-						"Content-Type": "application/json",
-					},
+				const res = await fetch(`${BASE_URL}/api/auth/signup`, {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(payload),
 				});
+				const json = await res.json();
+				console.log(`[AuthForm] 회원가입 HTTP ${res.status}`, json);
 
-				console.log("✅ 회원가입 응답:", res.data);
-
-				if ([200, 201].includes(res.status)) {
-					navigate("/login");
-				} else {
-					setError(res.data.message || "회원가입에 실패했습니다.");
+				if (!res.ok) {
+					throw new Error(json.message || "회원가입 실패");
 				}
+
+				navigate("/login");
 			}
 		} catch (err) {
-			console.error("❌ 오류 발생:", err);
-
-			if (err.response) {
-				console.error("📨 서버 응답 메시지:", err.response.data);
-				setError(err.response.data.message || "요청이 잘못되었습니다.");
-			} else {
-				console.error("❌ 서버 응답 없음:", err);
-				setError("서버 오류가 발생했습니다.");
-			}
+			console.error("[AuthForm] 오류 발생:", err);
+			setError(err.message);
 		} finally {
 			setLoading(false);
 		}
@@ -172,65 +143,56 @@ function AuthForm({ mode }) {
 
 	return (
 		<form className="auth-form-root" onSubmit={handleSubmit}>
-			<h2 className="auth-form-title">
-				{mode === "login" ? "로그인" : "회원가입"}
-			</h2>
+			<h2 className="auth-form-title">{isLogin ? "로그인" : "회원가입"}</h2>
 
 			{error && <div className="auth-form-error">{error}</div>}
 
-			{mode === "signup" && (
+			{!isLogin && (
 				<>
 					<div className="auth-form-field">
 						<label htmlFor="name">이름</label>
 						<input
 							id="name"
 							name="name"
-							type="text"
 							value={fields.name}
 							onChange={handleChange}
 							disabled={loading}
 						/>
 					</div>
-
 					<div className="auth-form-field">
 						<label htmlFor="studentNumber">학번</label>
 						<input
 							id="studentNumber"
 							name="studentNumber"
-							type="text"
+							placeholder="8~20자리 숫자"
 							value={fields.studentNumber}
 							onChange={handleChange}
-							placeholder="8~20자리 숫자"
 							disabled={loading}
 						/>
 					</div>
-
 					<div className="auth-form-field">
 						<label htmlFor="phoneNumber">전화번호</label>
 						<input
 							id="phoneNumber"
 							name="phoneNumber"
-							type="text"
+							placeholder="010-1234-5678"
 							value={fields.phoneNumber}
 							onChange={handleChange}
-							placeholder="010-1234-5678"
 							disabled={loading}
 						/>
 					</div>
-
 					<div className="auth-form-field">
 						<label htmlFor="grade">학년</label>
 						<input
 							id="grade"
 							name="grade"
 							type="number"
+							placeholder="1~4"
 							value={fields.grade}
 							onChange={handleChange}
-							placeholder="1~4"
 							disabled={loading}
 						/>
 					</div>
-
 					<div className="auth-form-field">
 						<label htmlFor="enrollmentStatus">재학상태</label>
 						<select
@@ -256,11 +218,9 @@ function AuthForm({ mode }) {
 					type="email"
 					value={fields.email}
 					onChange={handleChange}
-					placeholder="이메일을 입력하세요"
 					disabled={loading}
 				/>
 			</div>
-
 			<div className="auth-form-field">
 				<label htmlFor="password">비밀번호</label>
 				<input
@@ -269,12 +229,10 @@ function AuthForm({ mode }) {
 					type="password"
 					value={fields.password}
 					onChange={handleChange}
-					placeholder="비밀번호를 입력하세요"
 					disabled={loading}
 				/>
 			</div>
-
-			{mode === "signup" && (
+			{!isLogin && (
 				<div className="auth-form-field">
 					<label htmlFor="confirm">비밀번호 확인</label>
 					<input
@@ -283,26 +241,22 @@ function AuthForm({ mode }) {
 						type="password"
 						value={fields.confirm}
 						onChange={handleChange}
-						placeholder="비밀번호를 다시 입력하세요"
 						disabled={loading}
 					/>
 				</div>
 			)}
 
 			<button className="auth-form-btn" type="submit" disabled={loading}>
-				{mode === "login" ? "로그인" : "회원가입"}
+				{isLogin ? "로그인" : "회원가입"}
 			</button>
-
 			<div
 				className="auth-form-link"
-				onClick={() => navigate(mode === "login" ? "/signup" : "/login")}
+				onClick={() => navigate(isLogin ? "/signup" : "/login")}
 			>
-				{mode === "login"
+				{isLogin
 					? "회원가입이 필요하신가요?"
 					: "이미 계정이 있으신가요? 로그인"}
 			</div>
 		</form>
 	);
 }
-
-export default AuthForm;
