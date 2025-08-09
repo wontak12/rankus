@@ -1,13 +1,11 @@
 // src/pages/CreateLab.js
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import api from "../api"; // ✅ axios 인스턴스 사용
 import "../styles/CreateLab.css";
 
 export default function CreateLab() {
 	const navigate = useNavigate();
-	const { id } = useParams();
-	const isEdit = Boolean(id);
 
 	const [fields, setFields] = useState({
 		name: "",
@@ -49,20 +47,13 @@ export default function CreateLab() {
 			};
 			console.log("[CreateLab] 요청 바디:", payload);
 
-			// axios 인스턴스로 POST 요청 (인터셉터가 토큰을 붙여줌)
-			const res = await api.post(
-				isEdit
-					? `/api/lab-creation-requests/${id}`
-					: "/api/lab-creation-requests",
-				payload
-			);
+			// 항상 POST /api/lab-creation-requests
+			const res = await api.post("/api/lab-creation-requests", payload);
 			console.log("[CreateLab] HTTP", res.status, res.data);
 
-			// 201 Created
 			setSuccess(true);
 			setTimeout(() => navigate("/promo"), 1500);
 		} catch (err) {
-			// axios 에러는 err.response 에 담겨 있음
 			const status = err.response?.status;
 			const msg = err.response?.data?.message || err.message;
 			console.error("[CreateLab] 오류", status, err.response?.data || err);
@@ -70,6 +61,8 @@ export default function CreateLab() {
 			if (status === 400) setError("입력값을 확인해주세요.");
 			else if (status === 409) setError("이미 신청된 랩실입니다.");
 			else if (status === 401) setError("로그인이 필요합니다.");
+			else if (status >= 500)
+				setError("서버 오류입니다. 잠시 후 다시 시도해주세요.");
 			else setError(msg);
 		} finally {
 			setLoading(false);
@@ -80,7 +73,7 @@ export default function CreateLab() {
 		return (
 			<div className="createlab-root">
 				<div className="createlab-success">
-					랩실이 성공적으로 {isEdit ? "수정" : "개설"}되었습니다!
+					랩실이 성공적으로 개설되었습니다!
 					<br />
 					잠시 후 내 랩실로 이동합니다.
 				</div>
@@ -90,9 +83,7 @@ export default function CreateLab() {
 
 	return (
 		<div className="createlab-root">
-			<h2 className="createlab-title">
-				{isEdit ? "랩실 정보 수정" : "랩실 개설"}
-			</h2>
+			<h2 className="createlab-title">랩실 개설</h2>
 			<form className="createlab-form" onSubmit={handleSubmit}>
 				{/* 랩실 이름 */}
 				<div className="createlab-field">
@@ -183,7 +174,7 @@ export default function CreateLab() {
 				{error && <div className="createlab-error">{error}</div>}
 
 				<button className="createlab-btn" type="submit" disabled={loading}>
-					{isEdit ? "수정" : "개설"} 신청
+					개설 신청
 				</button>
 			</form>
 		</div>

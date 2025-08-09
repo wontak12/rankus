@@ -3,7 +3,15 @@ import axios from "axios";
 
 const BASE_URL = "http://3.34.229.56:8080";
 
-// 1) 일반 요청 인스턴스
+// -------------------------------
+// 옵션: 401 발생 시 동작을 바꾸고 싶으면 setUnauthorizedHandler로 교체하세요.
+// 기본 동작: 토큰 제거 후 /login 이동
+let onUnauthorized = null;
+export function setUnauthorizedHandler(fn) {
+	onUnauthorized = typeof fn === "function" ? fn : null;
+}
+// -------------------------------
+
 const api = axios.create({
 	baseURL: BASE_URL,
 	headers: {
@@ -12,53 +20,40 @@ const api = axios.create({
 	},
 });
 
-// 2) 리프레시 전용 인스턴스
-const refreshClient = axios.create({
-	baseURL: BASE_URL,
-	headers: { "Content-Type": "application/json" },
-});
-
-// 요청 인터셉터: 항상 accessToken 헤더에 실어 보냄 + 토큰 로깅
+// 요청 인터셉터: 항상 AT 붙이기
 api.interceptors.request.use((config) => {
 	const accessToken = localStorage.getItem("accessToken");
-	const refreshToken = localStorage.getItem("refreshToken");
-	console.log("[api.request] accessToken:", accessToken);
-	console.log("[api.request] refreshToken:", refreshToken);
-
 	if (accessToken) {
 		config.headers.Authorization = `Bearer ${accessToken}`;
 	}
 	return config;
 });
 
-// 응답 인터셉터: 401 Unauthorized 시 리프레시 시도
+// 응답 인터셉터: 리프레시 없음! 401이면 정리 후 로그인으로.
 api.interceptors.response.use(
 	(res) => res,
 	async (err) => {
-		const orig = err.config;
-		if (err.response?.status === 401 && !orig._retry) {
-			orig._retry = true;
-			const rt = localStorage.getItem("refreshToken");
-			if (rt) {
+		const status = err.response?.status;
+
+		if (status === 401) {
+			// 기본 처리: 토큰 제거 + 로그인 페이지로 이동
+			if (onUnauthorized) {
 				try {
-					const r = await refreshClient.post("/api/auth/refresh", {
-						refreshToken: rt,
-					});
-					const {
-						data: {
-							data: { accessToken: newAt, refreshToken: newRt },
-						},
-					} = r;
-					localStorage.setItem("accessToken", newAt);
-					localStorage.setItem("refreshToken", newRt);
-					orig.headers.Authorization = `Bearer ${newAt}`;
-					return api(orig);
-				} catch (refreshError) {
-					return Promise.reject(refreshError);
+					await onUnauthorized(err);
+				} catch (_) {
+					// 사용자 핸들러 실패 시에도 기본 안전조치 수행
+					localStorage.removeItem("accessToken");
+					localStorage.removeItem("refreshToken");
+					window.location.assign("/login");
 				}
+			} else {
+				localStorage.removeItem("accessToken");
+				localStorage.removeItem("refreshToken");
+				window.location.assign("/login");
 			}
-			return Promise.reject(err);
 		}
+
+		// 그 외 상태코드는 그대로 던짐 (403/404/422/500 등)
 		return Promise.reject(err);
 	}
 );
