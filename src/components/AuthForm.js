@@ -45,7 +45,7 @@ export default function AuthForm({ mode }) {
 				const payload = { email, password };
 				console.log("[AuthForm] 로그인 요청 페이로드:", payload);
 
-				const res = await fetch(`${BASE_URL}/api/auth/login/v2`, {
+				const res = await fetch(`${BASE_URL}/api/auth/login`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(payload),

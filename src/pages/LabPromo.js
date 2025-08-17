@@ -1,38 +1,68 @@
+// src/pages/LabPromo.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api"; // axios 인스턴스 사용 (BASE_URL 설정돼 있음)
 import LabCard from "../components/LabCard.js";
 import "../styles/LabPromo.css";
 
 function LabPromo() {
 	const [labs, setLabs] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [errMsg, setErrMsg] = useState("");
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		fetch("http://3.34.229.56:8080/api/labs")
-			.then((res) => res.json())
-			.then((data) => {
-				// data.data가 배열이 아닐 수도 있으니 배열로 변환
-				if (data.success === true && data.data) {
-					if (Array.isArray(data.data)) {
-						setLabs(data.data);
-					} else {
-						setLabs([data.data]);
-					}
-				} else {
+		let mounted = true;
+
+		(async () => {
+			try {
+				// GET /api/labs
+				const res = await api.get("/api/labs");
+				// 응답 예시:
+				// { status:200, message:"...", data:[ {id,name,description,ranking,professorName,createdAt}, ... ] }
+				const payload = res?.data;
+
+				const listRaw = Array.isArray(payload?.data)
+					? payload.data
+					: payload?.data
+					? [payload.data]
+					: [];
+
+				// 필요 시 정렬(랭킹 오름차순)
+				const list = [...listRaw].sort(
+					(a, b) =>
+						(a?.ranking ?? Number.MAX_SAFE_INTEGER) -
+						(b?.ranking ?? Number.MAX_SAFE_INTEGER)
+				);
+
+				if (mounted) {
+					setLabs(list);
+					setErrMsg("");
+				}
+			} catch (err) {
+				console.error(
+					"[LabPromo] GET /api/labs failed:",
+					err?.response?.status,
+					err?.response?.data || err
+				);
+				if (mounted) {
+					setErrMsg("랩실 목록을 불러오지 못했습니다.");
 					setLabs([]);
 				}
-				setLoading(false);
-			})
-			.catch(() => {
-				setLabs([]);
-				setLoading(false);
-			});
+			} finally {
+				if (mounted) setLoading(false);
+			}
+		})();
+
+		return () => {
+			mounted = false;
+		};
 	}, []);
 
 	return (
 		<div className="labpromo-root">
 			<div className="labpromo-title">한신대학교 랩실을 소개합니다.</div>
+
 			<div className="labpromo-topbar">
 				<button
 					className="labpromo-create-btn"
@@ -41,8 +71,11 @@ function LabPromo() {
 					랩실을 개설하시겠습니까?
 				</button>
 			</div>
+
 			{loading ? (
 				<div className="labpromo-empty">랩실 목록을 불러오는 중...</div>
+			) : errMsg ? (
+				<div className="labpromo-empty">{errMsg}</div>
 			) : labs.length === 0 ? (
 				<div className="labpromo-empty">등록된 랩실이 없습니다.</div>
 			) : (
@@ -57,10 +90,14 @@ function LabPromo() {
 								id={lab.id}
 								title={lab.name}
 								description={lab.description}
-								image={lab.image} // image 필드가 없으면 imageUrl 등 실제 필드명으로 수정
-								professor={lab.professor}
-								createdAt={lab.timestamp}
-								likes={lab.ranking}
+								// API에 이미지 없음 → 컴포넌트에서 placeholder 처리하거나 여기서 null 전달
+								image={lab.imageUrl || lab.image || null}
+								// API 필드명: professorName
+								professor={lab.professorName ?? "미정"}
+								// API 필드명: createdAt
+								createdAt={lab.createdAt}
+								// 랭킹 점수
+								likes={lab.ranking ?? 0}
 							/>
 						</div>
 					))}
