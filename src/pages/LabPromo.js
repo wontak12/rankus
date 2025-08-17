@@ -1,7 +1,7 @@
 // src/pages/LabPromo.jsx
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import api from "../api"; // axios 인스턴스 사용 (BASE_URL 설정돼 있음)
+import { Link, useNavigate } from "react-router-dom"; // ✅ Link 추가
+import api from "../api";
 import LabCard from "../components/LabCard.js";
 import "../styles/LabPromo.css";
 
@@ -13,27 +13,20 @@ function LabPromo() {
 
 	useEffect(() => {
 		let mounted = true;
-
 		(async () => {
 			try {
-				// GET /api/labs
 				const res = await api.get("/api/labs");
-				// 응답 예시:
-				// { status:200, message:"...", data:[ {id,name,description,ranking,professorName,createdAt}, ... ] }
 				const payload = res?.data;
-
 				const listRaw = Array.isArray(payload?.data)
 					? payload.data
 					: payload?.data
 					? [payload.data]
 					: [];
 
-				// 필요 시 정렬(랭킹 오름차순)
-				const list = [...listRaw].sort(
-					(a, b) =>
-						(a?.ranking ?? Number.MAX_SAFE_INTEGER) -
-						(b?.ranking ?? Number.MAX_SAFE_INTEGER)
-				);
+				// 정렬 시 ranking(목록) / rank(상세 스키마) 모두 대비
+				const getRank = (x) => x?.ranking ?? x?.rank ?? Number.MAX_SAFE_INTEGER;
+
+				const list = [...listRaw].sort((a, b) => getRank(a) - getRank(b));
 
 				if (mounted) {
 					setLabs(list);
@@ -53,7 +46,6 @@ function LabPromo() {
 				if (mounted) setLoading(false);
 			}
 		})();
-
 		return () => {
 			mounted = false;
 		};
@@ -81,25 +73,22 @@ function LabPromo() {
 			) : (
 				<div className="labpromo-grid">
 					{labs.map((lab) => (
-						<div
+						<Link
 							key={lab.id}
-							onClick={() => navigate(`/lab/${lab.id}`)}
-							style={{ cursor: "pointer" }}
+							to={`/lab/${lab.id}`} // ✅ Link로 라우팅
+							className="labpromo-card-link" // (선택) 스타일용 클래스
+							aria-label={`${lab.name} 상세 보기`}
 						>
 							<LabCard
 								id={lab.id}
 								title={lab.name}
 								description={lab.description}
-								// API에 이미지 없음 → 컴포넌트에서 placeholder 처리하거나 여기서 null 전달
 								image={lab.imageUrl || lab.image || null}
-								// API 필드명: professorName
 								professor={lab.professorName ?? "미정"}
-								// API 필드명: createdAt
 								createdAt={lab.createdAt}
-								// 랭킹 점수
-								likes={lab.ranking ?? 0}
+								likes={lab.ranking ?? lab.rank ?? 0} // ✅ ranking/rank 모두 대비
 							/>
-						</div>
+						</Link>
 					))}
 				</div>
 			)}

@@ -1,6 +1,7 @@
+// src/pages/LabDetail.jsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../api"; // ✅ api 객체 불러오기
+import api from "../api";
 import CommentList from "../components/CommentList";
 import LikeButton from "../components/LikeButton";
 import "../styles/LabDetail.css";
@@ -20,25 +21,40 @@ function LabDetail() {
 		const fetchLab = async () => {
 			try {
 				const res = await api.get(`/api/labs/${id}`);
-				const data = res.data;
+				const payload = res?.data;
 
-				if (data.success && data.data) {
-					const labData = data.data;
+				// success(true) 또는 status(200) 둘 다 허용
+				const ok =
+					payload?.success === true ||
+					payload?.status === 200 ||
+					(payload?.data && typeof payload.data === "object");
+
+				if (ok && payload?.data) {
+					const labData = payload.data;
+
+					// 날짜: data.createdAt 우선, 없으면 payload.timestamp 보조
+					const createdAtSrc = labData.createdAt || payload.timestamp || null;
+					const createdAt = createdAtSrc
+						? new Date(createdAtSrc).toLocaleDateString("ko-KR", {
+								year: "numeric",
+								month: "2-digit",
+								day: "2-digit",
+						  })
+						: "-";
+
+					const likeValue = labData.totalScore ?? labData.rank ?? 0;
+
 					setLab({
 						id: labData.id,
 						title: labData.name,
 						content: labData.description,
-						image: "", // 이미지 필드 없으므로 공백
-						author: "", // 작성자 없음
-						createdAt: new Date(data.timestamp).toLocaleDateString("ko-KR", {
-							year: "numeric",
-							month: "2-digit",
-							day: "2-digit",
-						}),
+						image: "", // 이미지 필드 없으므로 공백 유지
+						author: "", // 작성자 없음 유지
+						createdAt,
 						professor: labData.professorName || "정보 없음",
-						likes: labData.rank ?? 0,
+						likes: likeValue,
 					});
-					setLikes(labData.rank ?? 0);
+					setLikes(likeValue);
 				} else {
 					setLab(null);
 				}
@@ -47,7 +63,11 @@ function LabDetail() {
 				setJoined(false);
 				setComments([]);
 			} catch (error) {
-				console.error("랩실 정보 로딩 실패", error);
+				console.error(
+					"랩실 정보 로딩 실패",
+					error?.response?.status,
+					error?.response?.data || error
+				);
 				setLab(null);
 			} finally {
 				setLoading(false);
