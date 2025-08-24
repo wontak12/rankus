@@ -13,7 +13,7 @@ import NoLab from "./pages/NoLab.js";
 import Profile from "./pages/Profile.js";
 import Signup from "./pages/Signup.js";
 
-import Interview from "./components/mylab/Interview"; // ✅ 추가
+import Interview from "./components/mylab/Interview";
 import { useAuth } from "./contexts/AuthContext";
 import JoinLab from "./pages/JoinLab.js";
 import JoinRequestsPage from "./pages/JoinRequestsPage.js";
@@ -23,13 +23,13 @@ import NoticeDetail from "./pages/NoticeDetail.js";
 import NoticeForm from "./pages/NoticeForm.js";
 import NoticePage from "./pages/NoticePage.js";
 import VotePage from "./pages/VotePage.js";
-//신현재 김원탁은 똥꼬다
+
 function App() {
 	const { user } = useAuth();
-	// 현재 경로 확인
 	const path = window.location.pathname;
 	const isAuthPage = path === "/" || path === "/login" || path === "/signup";
 	const headerUser = isAuthPage ? null : user;
+
 	return (
 		<Router>
 			<Header />
@@ -37,12 +37,22 @@ function App() {
 				<Route path="/" element={<Intro />} />
 				<Route path="/login" element={<Login />} />
 				<Route path="/signup" element={<Signup />} />
-				{/* 로그인 이후 Layout 적용되는 내부 페이지 */}
+
+				{/* 로그인 이후 Layout 적용 */}
 				<Route element={<Layout />}>
 					<Route path="/home" element={<Home />} />
 					<Route path="/promo" element={<LabPromo />} />
 					<Route path="/lab/:id" element={<LabDetail />} />
+
+					{/* ✅ 기존 레거시 경로 (interviewId 없음) — 유지하되, JoinLab 내부에서 ?interviewId=... 쿼리로도 처리 가능하도록 이미 패치한 버전 사용 */}
 					<Route path="/lab/:id/join" element={<JoinLab />} />
+
+					{/* ✅ 신규: interviewId 포함 라우트 */}
+					<Route
+						path="/lab/:labId/interviews/:interviewId/join"
+						element={<JoinLab />}
+					/>
+
 					<Route path="/create-lab" element={<CreateLab />} />
 					<Route path="/my-lab" element={<MyLab />} />
 					<Route path="/my-lab/no-lab" element={<NoLab />} />
@@ -54,8 +64,10 @@ function App() {
 					<Route path="/notice/:id" element={<NoticeDetail />} />
 					<Route path="/members" element={<MemberList />} />
 					<Route path="/member/:id" element={<MemberDetail />} />
-					<Route path="/lab/:labId/interviews" element={<Interview />} />{" "}
-					{/* ✅ 인터뷰 페이지 */}
+
+					{/* 인터뷰 리스트(슬롯 설정 화면 등) */}
+					<Route path="/lab/:labId/interviews" element={<Interview />} />
+
 					<Route path="/join-requests" element={<JoinRequestsPage />} />
 				</Route>
 			</Routes>
