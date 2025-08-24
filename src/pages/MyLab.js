@@ -1,9 +1,10 @@
 // src/pages/MyLab.jsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api";
+import api from "../api.js";
 import "../styles/MyLab.css";
 
+import ApplicationsPreview from "../components/mylab/ApplicationsPreview";
 import CalendarSection from "../components/mylab/CalendarSection";
 import FilePreview from "../components/mylab/FilePreview";
 import HeaderSection from "../components/mylab/HeaderSection";
@@ -210,6 +211,7 @@ function MyLab() {
 				<NoticePreview />
 				<FilePreview />
 				<MemberSection labId={lab.id} />
+				<ApplicationsPreview labId={lab.id} />
 				{/* ❌ 내부 렌더 제거: {lab && <Interview labId={lab.id} />} */}
 			</div>
 		</div>

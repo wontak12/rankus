@@ -24,23 +24,8 @@ function todayStr() {
 	const day = String(d.getDate()).padStart(2, "0");
 	return `${y}-${m}-${day}`;
 }
-// datetime-local -> ISO8601(+offset)
-function toIsoWithOffset(local) {
-	if (!local) return "";
-	const [date, t] = local.split("T");
-	if (!date || !t) return local;
-	const [hh = "00", mm = "00"] = t.split(":");
-	const ss = "00";
-	const dt = new Date(`${date}T${hh}:${mm}:${ss}`);
-	const offsetMin = -dt.getTimezoneOffset(); // KST: +540
-	const sign = offsetMin >= 0 ? "+" : "-";
-	const abs = Math.abs(offsetMin);
-	const offHH = String(Math.floor(abs / 60)).padStart(2, "0");
-	const offMM = String(abs % 60).padStart(2, "0");
-	return `${date}T${hh}:${mm}:${ss}${sign}${offHH}:${offMM}`;
-}
 
-/* ===== 디버그 유틸 ===== */
+/* ===== 디버그 유틸 (필요 시 콘솔에서 확인용) ===== */
 const DEBUG_INT = true;
 function shortToken(t, n = 16) {
 	return t ? `${t.slice(0, n)}…` : "∅";
@@ -68,8 +53,6 @@ function curlPostInterview(id, body, base = "http://3.34.229.56:8080") {
 		.filter(Boolean)
 		.join(" \\\n");
 }
-
-/* ===== 슬롯용 디버그 유틸 ===== */
 function curlGetSlots(labId, interviewId, base = "http://3.34.229.56:8080") {
 	const at = localStorage.getItem("accessToken");
 	return [
@@ -99,6 +82,7 @@ function curlPostSlot(
 		.join(" \\\n");
 }
 
+/* ===== 페이지: Interview ===== */
 export default function Interview({ labId: propLabId }) {
 	const { labId: paramLabId, id: paramId } = useParams();
 	const labId = propLabId ?? paramLabId ?? paramId;
@@ -107,15 +91,14 @@ export default function Interview({ labId: propLabId }) {
 	const [errMsg, setErrMsg] = useState("");
 	const [items, setItems] = useState([]);
 
-	// 생성 폼 상태(면접 자체)
+	// 생성 폼 상태(면접 자체) — 날짜 하나만!
 	const [createOpen, setCreateOpen] = useState(false);
 	const [creating, setCreating] = useState(false);
 	const [createErr, setCreateErr] = useState("");
 	const [fieldErrs, setFieldErrs] = useState({});
 	const [createMsg, setCreateMsg] = useState("");
 	const [form, setForm] = useState({
-		startDate: todayStr(),
-		endDate: todayStr(),
+		date: todayStr(), // ✅ 단일 날짜
 		durationMinutes: 30,
 		maxApplicantsPerSlot: 1,
 	});
@@ -144,6 +127,7 @@ export default function Interview({ labId: propLabId }) {
 				: payload?.data
 				? [payload.data]
 				: [];
+			// API엔 startDate/endDate가 있지만, 우리 UI는 date만 쓰므로 정렬은 startDate 기준
 			const sorted = [...listRaw].sort(
 				(a, b) => new Date(a.startDate) - new Date(b.startDate)
 			);
@@ -178,14 +162,7 @@ export default function Interview({ labId: propLabId }) {
 		};
 	}, [labId]);
 
-	// 폼 보조: 종료일 최소 = 시작일
-	useEffect(() => {
-		if (form.endDate && form.startDate && form.endDate < form.startDate) {
-			setForm((f) => ({ ...f, endDate: f.startDate }));
-		}
-	}, [form.startDate]); // eslint-disable-line
-
-	// 면접 생성 핸들러
+	// 면접 생성 핸들러 (단일 날짜 → 서버에는 startDate=endDate=date 로 전송)
 	const handleCreate = async (e) => {
 		e.preventDefault();
 		if (!labId) return;
@@ -195,19 +172,15 @@ export default function Interview({ labId: propLabId }) {
 		setCreateMsg("");
 
 		const payload = {
-			startDate: form.startDate?.trim(),
-			endDate: form.endDate?.trim(),
+			startDate: form.date?.trim(), // ✅ 단일 날짜
+			endDate: form.date?.trim(), // ✅ 동일 날짜로 맞춰 전송(서버 호환)
 			durationMinutes: Number(form.durationMinutes),
 			maxApplicantsPerSlot: Number(form.maxApplicantsPerSlot),
 		};
 
 		// 최소 검증
-		if (!payload.startDate || !payload.endDate) {
-			setCreateErr("시작일/종료일을 선택하세요.");
-			return;
-		}
-		if (payload.startDate > payload.endDate) {
-			setCreateErr("종료일은 시작일 이후여야 합니다.");
+		if (!payload.startDate) {
+			setCreateErr("면접 날짜를 선택하세요.");
 			return;
 		}
 		if (
@@ -247,13 +220,6 @@ export default function Interview({ labId: propLabId }) {
 				validateStatus: () => true,
 			});
 
-			console.log("[Interview] create status:", res.status, "data:", res?.data);
-			window.__interview_create__ = {
-				status: res.status,
-				data: res?.data,
-				payload,
-			};
-
 			if (res.status === 201 || res?.data?.success === true) {
 				setCreateMsg("면접 일정이 생성되었습니다.");
 				const created = res?.data?.data;
@@ -279,14 +245,6 @@ export default function Interview({ labId: propLabId }) {
 			}
 			setCreateErr(serverMsg);
 			setFieldErrs(fields);
-
-			console.groupCollapsed(
-				"%c[Interview] create -> error detail",
-				"color:#f80"
-			);
-			console.log("server.message:", serverMsg);
-			console.log("server.errors:", serverErrors);
-			console.groupEnd();
 		} catch (err) {
 			console.error(
 				"[Interview] create error:",
@@ -329,7 +287,7 @@ export default function Interview({ labId: propLabId }) {
 					</button>
 				</div>
 
-				{/* 면접 생성 폼 */}
+				{/* 면접 생성 폼 (날짜 하나만) */}
 				{createOpen && (
 					<form
 						onSubmit={handleCreate}
@@ -344,18 +302,18 @@ export default function Interview({ labId: propLabId }) {
 						<div
 							style={{
 								display: "grid",
-								gridTemplateColumns: "1fr 1fr",
+								gridTemplateColumns: "1fr 1fr 1fr",
 								gap: 12,
 							}}
 						>
 							<div>
-								<label>시작일</label>
+								<label>면접 날짜</label>
 								<input
 									type="date"
-									value={form.startDate}
+									value={form.date}
 									min={todayStr()}
 									onChange={(e) =>
-										setForm((f) => ({ ...f, startDate: e.target.value }))
+										setForm((f) => ({ ...f, date: e.target.value }))
 									}
 									required
 									disabled={creating}
@@ -364,22 +322,7 @@ export default function Interview({ labId: propLabId }) {
 									<div style={{ color: "#b00020" }}>{fieldErrs.startDate}</div>
 								)}
 							</div>
-							<div>
-								<label>종료일</label>
-								<input
-									type="date"
-									value={form.endDate}
-									min={form.startDate || todayStr()}
-									onChange={(e) =>
-										setForm((f) => ({ ...f, endDate: e.target.value }))
-									}
-									required
-									disabled={creating}
-								/>
-								{fieldErrs.endDate && (
-									<div style={{ color: "#b00020" }}>{fieldErrs.endDate}</div>
-								)}
-							</div>
+
 							<div>
 								<label>슬롯 길이(분)</label>
 								<input
@@ -399,6 +342,7 @@ export default function Interview({ labId: propLabId }) {
 									</div>
 								)}
 							</div>
+
 							<div>
 								<label>슬롯당 최대 인원(명)</label>
 								<input
@@ -458,8 +402,7 @@ export default function Interview({ labId: propLabId }) {
 								onClick={() =>
 									setForm((f) => ({
 										...f,
-										startDate: todayStr(),
-										endDate: todayStr(),
+										date: todayStr(),
 										durationMinutes: 30,
 										maxApplicantsPerSlot: 2,
 									}))
@@ -479,9 +422,7 @@ export default function Interview({ labId: propLabId }) {
 					<ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
 						{items.map((it) => (
 							<li
-								key={
-									it.id ?? `${it.startDate}-${it.endDate}-${it.durationMinutes}`
-								}
+								key={it.id ?? `${it.startDate}-${it.durationMinutes}`}
 								style={{
 									border: "1px solid #eee",
 									borderRadius: 12,
@@ -492,9 +433,7 @@ export default function Interview({ labId: propLabId }) {
 								<div style={{ fontWeight: 700, marginBottom: 6 }}>
 									{it.labName || `랩실 #${it.labId || labId}`} — 면접 #{it.id}
 								</div>
-								<div>
-									기간: {it.startDate} ~ {it.endDate}
-								</div>
+								<div>면접 날짜: {it.startDate}</div>
 								<div>슬롯 길이: {it.durationMinutes ?? 0}분</div>
 								<div>슬롯당 최대 인원: {it.maxApplicantsPerSlot ?? 0}명</div>
 								<div>상태: {it.status ?? "-"}</div>
@@ -502,8 +441,13 @@ export default function Interview({ labId: propLabId }) {
 									생성: {fmtDate(it.createdAt)} / 수정: {fmtDate(it.updatedAt)}
 								</div>
 
-								{/* ▼▼ 면접별 슬롯 패널 ▼▼ */}
-								<SlotsPanel labId={labId} interviewId={it.id} />
+								{/* ▼ 해당 면접의 슬롯 패널. 날짜 하나만 주고, 그 날짜 내에서 시간만 선택 */}
+								<SlotsPanel
+									labId={labId}
+									interviewId={it.id}
+									interviewDate={it.startDate} // ✅ 단일 날짜 기준
+									durationMinutes={it.durationMinutes}
+								/>
 							</li>
 						))}
 					</ul>
@@ -515,8 +459,9 @@ export default function Interview({ labId: propLabId }) {
 
 /* =========================
    면접별 슬롯 패널 (목록 + 생성)
+   — 단일 날짜 내에서만 시간 선택
    ========================= */
-function SlotsPanel({ labId, interviewId, interviewMeta }) {
+function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [items, setItems] = useState([]);
@@ -528,35 +473,15 @@ function SlotsPanel({ labId, interviewId, interviewMeta }) {
 	const [createErr, setCreateErr] = useState("");
 	const [fieldErrs, setFieldErrs] = useState({});
 	const [slotForm, setSlotForm] = useState({
-		startLocal: "",
-		endLocal: "",
-		maxApplicants: 1,
+		startTime: "", // HH:mm
 	});
 
-	// ✅ UTC Z(+밀리초)로 변환: 2025-08-17T06:25:50.000Z
-	function toUtcZ(local) {
-		if (!local) return "";
-		const d = new Date(local); // datetime-local은 로컬시간으로 해석됨
-		const yyyy = d.getUTCFullYear();
-		const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
-		const dd = String(d.getUTCDate()).padStart(2, "0");
-		const HH = String(d.getUTCHours()).padStart(2, "0");
-		const MM = String(d.getUTCMinutes()).padStart(2, "0");
-		const SS = String(d.getUTCSeconds()).padStart(2, "0");
-		const ms = String(d.getUTCMilliseconds()).padStart(3, "0");
-		return `${yyyy}-${mm}-${dd}T${HH}:${MM}:${SS}.${ms}Z`;
+	// UTC Z(+ms)로 변환: 2025-08-17T06:25:50.000Z
+	function toUtcZ(dateTimeLocal) {
+		if (!dateTimeLocal) return "";
+		const d = new Date(dateTimeLocal); // 로컬시간으로 해석
+		return d.toISOString(); // ISO(UTC Z)로
 	}
-
-	// 면접 기간/길이 제약(있으면 적용)
-	const interviewStartDate = interviewMeta?.startDate; // 'YYYY-MM-DD'
-	const interviewEndDate = interviewMeta?.endDate; // 'YYYY-MM-DD'
-	const durationMinExpected = interviewMeta?.durationMinutes;
-
-	// 입력 min/max 보조: 면접기간이 있으면 그 범위로 제한
-	const minLocal = interviewStartDate
-		? `${interviewStartDate}T00:00`
-		: undefined;
-	const maxLocal = interviewEndDate ? `${interviewEndDate}T23:59` : undefined;
 
 	// GET 슬롯 목록
 	const fetchSlots = async () => {
@@ -611,60 +536,47 @@ function SlotsPanel({ labId, interviewId, interviewMeta }) {
 		setCreateErr("");
 		setFieldErrs({});
 
-		if (!slotForm.startLocal || !slotForm.endLocal) {
-			setCreateErr("시작/종료 시각을 입력하세요.");
+		if (!interviewDate) {
+			setCreateErr("면접 날짜 정보가 없습니다.");
 			return;
 		}
-		const start = new Date(slotForm.startLocal);
-		const end = new Date(slotForm.endLocal);
-		if (
-			!(start instanceof Date) ||
-			isNaN(start) ||
-			!(end instanceof Date) ||
-			isNaN(end)
-		) {
-			setCreateErr("잘못된 날짜/시간 형식입니다.");
-			return;
-		}
-		if (end <= start) {
-			setCreateErr("종료 시각은 시작 시각 이후여야 합니다.");
+		if (!slotForm.startTime) {
+			setCreateErr("시작 시간을 선택하세요.");
 			return;
 		}
 
-		// ✅ 면접 기간 범위 체크(있을 때만)
-		if (interviewStartDate && interviewEndDate) {
-			const startBound = new Date(`${interviewStartDate}T00:00`);
-			const endBound = new Date(`${interviewEndDate}T23:59:59.999`);
-			if (start < startBound || end > endBound) {
-				setCreateErr(
-					`슬롯은 면접 기간(${interviewStartDate} ~ ${interviewEndDate}) 안에 있어야 합니다.`
-				);
-				return;
-			}
-		}
-
-		// ✅ 길이 일치 체크(있을 때만)
-		if (Number.isFinite(durationMinExpected)) {
-			const diffMin = Math.round((end - start) / 60000);
-			if (diffMin !== Number(durationMinExpected)) {
-				setCreateErr(
-					`슬롯 길이는 ${durationMinExpected}분이어야 합니다. (현재 ${diffMin}분)`
-				);
-				return;
-			}
-		}
-
-		const cap = Number(slotForm.maxApplicants);
-		if (!Number.isFinite(cap) || cap < 1) {
-			setCreateErr("정원은 1 이상이어야 합니다.");
+		// 날짜 하나 + HH:mm → datetime-local 구성
+		const startLocal = `${interviewDate}T${slotForm.startTime}`;
+		const start = new Date(startLocal);
+		if (!(start instanceof Date) || isNaN(start)) {
+			setCreateErr("잘못된 시간 형식입니다.");
 			return;
 		}
 
-		// 🔁 서버가 Z(UTC) 형식을 선호하는 것으로 보이므로 UTC Z로 전송
+		const duration = Number(durationMinutes) || 0;
+		if (duration < 1) {
+			setCreateErr("유효한 슬롯 길이(분)가 아닙니다.");
+			return;
+		}
+		const end = new Date(start.getTime() + duration * 60000);
+
+		// 같은 날짜 안에서만
+		const dateOnly = (d) => d.toISOString().slice(0, 10);
+		if (dateOnly(start) !== interviewDate || dateOnly(end) !== interviewDate) {
+			setCreateErr(`슬롯은 면접 날짜(${interviewDate})를 벗어날 수 없습니다.`);
+			return;
+		}
+
+		// 서버가 UTC Z 선호한다고 가정
 		const payload = {
-			startTime: toUtcZ(slotForm.startLocal),
-			endTime: toUtcZ(slotForm.endLocal),
-			maxApplicants: cap,
+			startTime: toUtcZ(startLocal),
+			endTime: toUtcZ(
+				`${interviewDate}T${String(end.getHours()).padStart(2, "0")}:${String(
+					end.getMinutes()
+				).padStart(2, "0")}`
+			),
+			// 정원은 면접의 maxApplicantsPerSlot를 서버가 기본으로 잡는다면 생략 가능.
+			// 필요시 필드 추가해서 setSlotForm에 입력받도록 확장하세요.
 		};
 
 		if (DEBUG_INT) {
@@ -672,6 +584,14 @@ function SlotsPanel({ labId, interviewId, interviewMeta }) {
 			console.groupCollapsed(
 				"%c[Slots] POST create",
 				"color:#0a0;font-weight:bold"
+			);
+			console.log(
+				"interviewDate:",
+				interviewDate,
+				"startLocal:",
+				startLocal,
+				"end:",
+				end
 			);
 			console.log("payload:", payload);
 			console.log("Authorization(short):", shortToken(at));
@@ -693,14 +613,6 @@ function SlotsPanel({ labId, interviewId, interviewMeta }) {
 				}
 			);
 
-			console.log("[Slots] create ->", res.status, res?.data);
-			window.__slots_create__ = {
-				status: res.status,
-				data: res?.data,
-				payload,
-			};
-
-			// Swagger 예시가 200 OK 이므로 200/201/성공=true 모두 허용
 			if (
 				res.status === 200 ||
 				res.status === 201 ||
@@ -708,6 +620,8 @@ function SlotsPanel({ labId, interviewId, interviewMeta }) {
 			) {
 				setCreateMsg("슬롯이 생성되었습니다.");
 				await fetchSlots();
+				// 입력값 초기화
+				setSlotForm({ startTime: "" });
 			} else {
 				const msg =
 					res?.data?.message || `실패했습니다. (status: ${res.status})`;
@@ -752,67 +666,50 @@ function SlotsPanel({ labId, interviewId, interviewMeta }) {
 						background: "#fafafa",
 					}}
 				>
-					{/* 생성 폼 */}
+					{/* 생성 폼 — 면접 날짜는 고정, 시간만 고름 */}
 					<form onSubmit={handleCreateSlot} style={{ marginBottom: 12 }}>
 						<div
 							style={{
 								display: "grid",
-								gridTemplateColumns: "1fr 1fr 0.8fr",
+								gridTemplateColumns: "1fr 0.8fr",
 								gap: 12,
 								alignItems: "end",
 							}}
 						>
 							<div>
-								<label>시작 시각</label>
-								<input
-									type="datetime-local"
-									value={slotForm.startLocal}
-									onChange={(e) =>
-										setSlotForm((s) => ({ ...s, startLocal: e.target.value }))
-									}
-									required
-									disabled={creating}
-								/>
-								{fieldErrs.startTime && (
-									<div style={{ color: "#b00020" }}>{fieldErrs.startTime}</div>
-								)}
+								<label>
+									면접 날짜: <b>{interviewDate}</b>
+								</label>
+								<div style={{ marginTop: 6 }}>
+									<label>시작 시간</label>
+									<input
+										type="time"
+										value={slotForm.startTime}
+										onChange={(e) =>
+											setSlotForm((s) => ({ ...s, startTime: e.target.value }))
+										}
+										required
+										disabled={creating}
+									/>
+									{fieldErrs.startTime && (
+										<div style={{ color: "#b00020" }}>
+											{fieldErrs.startTime}
+										</div>
+									)}
+								</div>
+								<small style={{ color: "#666" }}>
+									슬롯 길이: {durationMinutes}분 — 종료 시간은 자동 계산됩니다.
+								</small>
 							</div>
+
 							<div>
-								<label>종료 시각</label>
-								<input
-									type="datetime-local"
-									value={slotForm.endLocal}
-									onChange={(e) =>
-										setSlotForm((s) => ({ ...s, endLocal: e.target.value }))
-									}
-									required
+								<button
+									className="mylab-interview-btn"
+									type="submit"
 									disabled={creating}
-								/>
-								{fieldErrs.endTime && (
-									<div style={{ color: "#b00020" }}>{fieldErrs.endTime}</div>
-								)}
-							</div>
-							<div>
-								<label>정원</label>
-								<input
-									type="number"
-									min="1"
-									step="1"
-									value={slotForm.maxApplicants}
-									onChange={(e) =>
-										setSlotForm((s) => ({
-											...s,
-											maxApplicants: e.target.value,
-										}))
-									}
-									required
-									disabled={creating}
-								/>
-								{fieldErrs.maxApplicants && (
-									<div style={{ color: "#b00020" }}>
-										{fieldErrs.maxApplicants}
-									</div>
-								)}
+								>
+									{creating ? "슬롯 생성 중..." : "슬롯 생성"}
+								</button>
 							</div>
 						</div>
 
@@ -830,16 +727,6 @@ function SlotsPanel({ labId, interviewId, interviewMeta }) {
 						{createMsg && (
 							<div style={{ color: "#0a7", marginTop: 8 }}>{createMsg}</div>
 						)}
-
-						<div style={{ marginTop: 10 }}>
-							<button
-								className="mylab-interview-btn"
-								type="submit"
-								disabled={creating}
-							>
-								{creating ? "슬롯 생성 중..." : "슬롯 생성"}
-							</button>
-						</div>
 					</form>
 
 					{/* 슬롯 목록 */}
