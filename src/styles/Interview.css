@@ -105,10 +105,11 @@
   background: #f7faff;
 }
 .interview-create-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 18px;
+  display: flex;
+
+  gap: 108px;
   margin-bottom: 12px;
+  align-items: center;
 }
 .interview-create-btn-row {
   margin-top: 16px;
@@ -173,3 +174,9 @@
 }
 
 /* 슬롯 패널 내부 스타일은 필요시 추가 */
+
+.interview-flex {
+  display: flex;
+  width: 100%;
+  gap: 1rem;
+}

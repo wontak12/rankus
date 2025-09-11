@@ -3,7 +3,7 @@
   margin: 2.5rem auto;
   background: #fff;
   border-radius: 0.8rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
   padding: 2.4rem 2rem 2.4rem 2rem;
 }
 .member-manage-tabs {
@@ -18,15 +18,15 @@
   padding: 0.8rem 2.2rem;
   font-size: 1.3rem;
   font-weight: 600;
-  color: #1976d2;
+  color: #67509c;
   cursor: pointer;
   outline: none;
   transition: background 0.2s;
 }
 .tab.active {
   background: #fff;
-  border-bottom: 2px solid #1976d2;
-  color: #1976d2;
+  border-bottom: 2px solid #67509c;
+  color: #67509c;
 }
 .member-manage-table-wrap {
   overflow-x: auto;
@@ -37,7 +37,8 @@
   font-size: 1.15rem;
   background: #fff;
 }
-.member-manage-table th, .member-manage-table td {
+.member-manage-table th,
+.member-manage-table td {
   border: 1px solid #e0e0e0;
   padding: 0.7rem 0.9rem;
   text-align: center;
@@ -50,7 +51,7 @@
   background: #f0f6ff;
 }
 .detail-btn {
-  background: #1976d2;
+  background: #67509c;
   color: #fff;
   border: none;
   border-radius: 0.4rem;
@@ -60,5 +61,5 @@
   transition: background 0.2s;
 }
 .detail-btn:hover {
-  background: #1256a3;
+  background: #9376d4;
 }

@@ -459,7 +459,7 @@ export default function Header() {
               onClick={handleOpenModal}
               disabled={isLoading}
             >
-              {isLoading ? "불러오는 중..." : "🧪 승인 대기 랩실 보기"}
+              {isLoading ? "불러오는 중..." : "승인 대기 랩실 보기"}
             </button>
 
             <div

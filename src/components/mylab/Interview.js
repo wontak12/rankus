@@ -188,14 +188,14 @@ export default function Interview({ labId: propLabId }) {
       !Number.isFinite(payload.durationMinutes) ||
       payload.durationMinutes < 1
     ) {
-      setCreateErr("슬롯 길이는 1분 이상이어야 합니다.");
+      setCreateErr("면접 시간은 1분 이상이어야 합니다.");
       return;
     }
     if (
       !Number.isFinite(payload.maxApplicantsPerSlot) ||
       payload.maxApplicantsPerSlot < 1
     ) {
-      setCreateErr("슬롯당 최대 인원은 1명 이상이어야 합니다.");
+      setCreateErr("면접당 최대 인원은 1명 이상이어야 합니다.");
       return;
     }
 
@@ -284,6 +284,7 @@ export default function Interview({ labId: propLabId }) {
         {createOpen && (
           <form onSubmit={handleCreate} className="interview-create-form">
             <div className="interview-create-grid">
+              
               <div>
                 <label>면접 날짜</label>
                 <input
@@ -304,7 +305,7 @@ export default function Interview({ labId: propLabId }) {
               </div>
 
               <div>
-                <label>슬롯 길이(분)</label>
+                <label>면접 시간(분)</label>
                 <input
                   type="number"
                   min="1"
@@ -322,9 +323,10 @@ export default function Interview({ labId: propLabId }) {
                   </div>
                 )}
               </div>
+             
 
               <div>
-                <label>슬롯당 최대 인원(명)</label>
+                <label>면접당 최대 인원(명)</label>
                 <input
                   type="number"
                   min="1"
@@ -394,28 +396,24 @@ export default function Interview({ labId: propLabId }) {
                   {it.labName || `랩실 #${it.labId || labId}`} — 면접 #{it.id}
                 </div>
                 <div className="interview-info-block">
+                  <div className="interview-flex">
                   <div className="interview-info-row">
                     <span className="interview-info-label">📅 면접 날짜</span>
                     <span className="interview-info-value">{it.startDate}</span>
                   </div>
                   <div className="interview-info-row">
-                    <span className="interview-info-label">⏱ 슬롯 길이</span>
+                    <span className="interview-info-label">⏱ 면접 시간</span>
                     <span className="interview-info-value">
                       {it.durationMinutes ?? 0}분
                     </span>
                   </div>
+                  </div>
                   <div className="interview-info-row">
                     <span className="interview-info-label">
-                      👥 슬롯당 최대 인원
+                      👥 면접당 최대 인원
                     </span>
                     <span className="interview-info-value">
                       {it.maxApplicantsPerSlot ?? 0}명
-                    </span>
-                  </div>
-                  <div className="interview-info-row">
-                    <span className="interview-info-label">상태</span>
-                    <span className="interview-info-value">
-                      {it.status ?? "-"}
                     </span>
                   </div>
                   <div className="interview-list-dateinfo">
@@ -538,7 +536,7 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
 
     const duration = Number(durationMinutes) || 0;
     if (duration < 1) {
-      setCreateErr("유효한 슬롯 길이(분)가 아닙니다.");
+      setCreateErr("유효한 면접 시간(분)이 아닙니다.");
       return;
     }
     const end = new Date(start.getTime() + duration * 60000);
@@ -546,7 +544,7 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
     // 같은 날짜 안에서만
     const dateOnly = (d) => d.toISOString().slice(0, 10);
     if (dateOnly(start) !== interviewDate || dateOnly(end) !== interviewDate) {
-      setCreateErr(`슬롯은 면접 날짜(${interviewDate})를 벗어날 수 없습니다.`);
+      setCreateErr(`면접은 면접 날짜(${interviewDate})를 벗어날 수 없습니다.`);
       return;
     }
 
@@ -601,7 +599,7 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
         res.status === 201 ||
         res?.data?.success === true
       ) {
-        setCreateMsg("슬롯이 생성되었습니다.");
+        setCreateMsg("면접이 생성되었습니다.");
         await fetchSlots();
         // 입력값 초기화
         setSlotForm({ startTime: "" });
@@ -637,7 +635,7 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
         onClick={() => setOpen((v) => !v)}
         style={{ marginBottom: 8 }}
       >
-        {open ? "슬롯 닫기" : "슬롯 보기/추가"}
+        {open ? "면접 닫기" : "면접 보기/추가"}
       </button>
 
       {open && (
@@ -680,9 +678,6 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
                     </div>
                   )}
                 </div>
-                <small style={{ color: "#666" }}>
-                  슬롯 길이: {durationMinutes}분 — 종료 시간은 자동 계산됩니다.
-                </small>
               </div>
 
               <div>
@@ -691,7 +686,7 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
                   type="submit"
                   disabled={creating}
                 >
-                  {creating ? "슬롯 생성 중..." : "슬롯 생성"}
+                  {creating ? "면접 생성 중..." : "면접 생성"}
                 </button>
               </div>
             </div>
@@ -714,11 +709,11 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
 
           {/* 슬롯 목록 */}
           {loading ? (
-            <div>슬롯 불러오는 중...</div>
+            <div>면접 불러오는 중...</div>
           ) : errMsg ? (
             <div>{errMsg}</div>
           ) : items.length === 0 ? (
-            <div>등록된 슬롯이 없습니다.</div>
+            <div>등록된 면접이 없습니다.</div>
           ) : (
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {items.map((s, idx) => (
@@ -733,7 +728,7 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
                   }}
                 >
                   <div style={{ fontWeight: 600, marginBottom: 4 }}>
-                    슬롯 #{s.id ?? idx}
+                    면접{s.id ?? idx}
                   </div>
                   <div className="interview-slot-info">
                     <div className="interview-slot-row">
@@ -763,10 +758,6 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
                       </span>
                     </div>
                     <div className="interview-slot-status">
-                      <span className="interview-slot-label">상태</span>
-                      <span className="interview-slot-value">
-                        {String(s.status ?? "-")}
-                      </span>
                       <span className="interview-slot-label">이용가능</span>
                       <span className="interview-slot-value">
                         {String(s.isAvailable)}
@@ -776,12 +767,6 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
                   <div style={{ color: "#666", marginTop: 4 }}>
                     생성: {fmtDate(s.createdAt)} / 수정: {fmtDate(s.updatedAt)}
                   </div>
-                  <details style={{ marginTop: 6 }}>
-                    <summary>RAW</summary>
-                    <pre style={{ whiteSpace: "pre-wrap", margin: 0 }}>
-                      {JSON.stringify(s, null, 2)}
-                    </pre>
-                  </details>
                 </li>
               ))}
             </ul>
@@ -790,7 +775,7 @@ function SlotsPanel({ labId, interviewId, interviewDate, durationMinutes }) {
           {/* 수동 새로고침 */}
           <div style={{ marginTop: 8 }}>
             <button className="mylab-interview-btn" onClick={fetchSlots}>
-              슬롯 목록 새로고침
+              면접 목록 새로고침
             </button>
           </div>
         </div>
