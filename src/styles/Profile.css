@@ -1,24 +1,55 @@
-.profile-root {
-  max-width: 500px;
-  margin: 2.5rem auto;
-  background: #fff;
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 12px rgba(26,35,126,0.07);
-  padding: 2.5rem 2rem 2rem 2rem;
+.profile-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  font-family: 'Pretendard', sans-serif;
 }
+
 .profile-title {
   font-size: 2rem;
-  font-weight: 800;
-  color: #67509C;
-  margin-bottom: 1.5rem;
-  letter-spacing: 0.03em;
-  text-align: center;
+  font-weight: 700;
+  color: #333;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
 }
-.profile-info {
-  font-size: 1.1rem;
-  color: #3b4a6b;
+
+.profile-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.profile-item {
   display: flex;
-  flex-direction: column;
-  gap: 1.1rem;
-  margin-top: 1.5rem;
+  justify-content: space-between;
+  padding: 15px 0;
+  font-size: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.profile-item:last-child {
+  border-bottom: none;
+}
+
+.profile-label {
+  font-weight: 600;
+  color: #555;
+}
+
+.profile-value {
+  color: #333;
+}
+
+.profile-status {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 1.2rem;
+  color: #888;
+}
+
+.profile-status.error {
+  color: #e74c3c;
+  font-weight: 500;
 }

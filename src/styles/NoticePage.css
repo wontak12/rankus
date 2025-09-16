@@ -1,0 +1,148 @@
+.notice-page {
+  max-width: 700px;
+  margin: 2.5rem auto;
+  padding: 0 20px;
+  font-family: 'Pretendard', sans-serif;
+}
+
+/* --- 공통 --- */
+.back-button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #555;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  padding: 0;
+}
+.action-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.action-button:hover {
+  background-color: #0056b3;
+}
+.status-indicator {
+  text-align: center;
+  padding: 2rem;
+  color: #888;
+}
+.status-indicator.error {
+  color: #e74c3c;
+}
+
+/* --- 목록 뷰 --- */
+.notice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid #f0f0f0;
+  padding-bottom: 1rem;
+}
+.notice-title {
+  font-size: 1.8rem;
+  margin: 0;
+}
+.notice-list {
+  padding: 0;
+  list-style: none;
+}
+.notice-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0.5rem;
+  border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+.notice-item:hover {
+  background-color: #f9f9f9;
+}
+.notice-item-content {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.notice-pinned {
+  background-color: #e7f3ff;
+  color: #007bff;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+.notice-item-title {
+  font-weight: 500;
+}
+.notice-item-date {
+  color: #888;
+  font-size: 0.9rem;
+  flex-shrink: 0; /* 날짜가 줄어들지 않도록 */
+}
+.load-more-btn {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 1.5rem;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+}
+.load-more-btn:hover {
+  background-color: #e0e0e0;
+}
+
+
+/* --- 상세 뷰 --- */
+.notice-detail-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.notice-detail-meta {
+  display: flex;
+  gap: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
+.notice-detail-content {
+  min-height: 200px;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+/* --- 생성 뷰 --- */
+.notice-create-title {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+.notice-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.notice-form input,
+.notice-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-family: inherit;
+}
+.notice-form button {
+  align-self: flex-end; /* 버튼을 오른쪽으로 */
+}
