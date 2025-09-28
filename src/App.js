@@ -55,7 +55,7 @@ function App() {
 						element={<JoinLab />}
 					/>
 
-					<Route path="/mylab/schedule" element={<Schedule />} />
+					<Route path="/lab/:labId/schedule" element={<Schedule />} />
 
 					<Route path="/create-lab" element={<CreateLab />} />
 					<Route path="/my-lab" element={<MyLab />} />
