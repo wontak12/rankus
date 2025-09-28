@@ -20,8 +20,6 @@ function LabDetail() {
 	useEffect(() => {
 		const fetchLab = async () => {
 			try {
-
-				
 				const res = await api.get(`/api/labs/${id}`);
 				const payload = res?.data;
 
