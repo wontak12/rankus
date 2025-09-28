@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/AuthForm.css";
 
-const BASE_URL = "http://3.34.229.56:8080";
+// ✅ 1. BASE_URL 상수를 제거하거나 빈 문자열로 설정합니다.
+// const BASE_URL = "http://3.34.229.56:8080"; // ❌ 이 코드를 제거해야 합니다.
 
 export default function AuthForm({ mode }) {
 	const navigate = useNavigate();
@@ -43,9 +44,9 @@ export default function AuthForm({ mode }) {
 				}
 
 				const payload = { email, password };
-				console.log("[AuthForm] 로그인 요청 페이로드:", payload);
+				console.log("[AuthForm] 로그인 요청 페이로드:", payload); // ✅ 2. BASE_URL을 제거하고 상대 경로(`/api/auth/login`)만 사용합니다.
 
-				const res = await fetch(`${BASE_URL}/api/auth/login`, {
+				const res = await fetch(`/api/auth/login`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(payload),
@@ -55,9 +56,8 @@ export default function AuthForm({ mode }) {
 
 				if (!res.ok) {
 					throw new Error(json.message || "로그인 실패");
-				}
+				} // ▶ 토큰 저장
 
-				// ▶ 토큰 저장
 				localStorage.setItem("accessToken", json.data.accessToken);
 				localStorage.setItem("refreshToken", json.data.refreshToken);
 				console.log(
@@ -67,9 +67,8 @@ export default function AuthForm({ mode }) {
 				console.log(
 					"[AuthForm] 저장된 refreshToken:",
 					localStorage.getItem("refreshToken")
-				);
+				); // ▶ 유저 컨텍스트 저장
 
-				// ▶ 유저 컨텍스트 저장
 				console.log("[AuthForm] setUser 호출, user 정보:", json.data.user);
 				setUser(json.data.user);
 
@@ -117,9 +116,9 @@ export default function AuthForm({ mode }) {
 					grade: Number(grade),
 					enrollmentStatus,
 				};
-				console.log("[AuthForm] 회원가입 요청 페이로드:", payload);
+				console.log("[AuthForm] 회원가입 요청 페이로드:", payload); // ✅ 2. BASE_URL을 제거하고 상대 경로(`/api/auth/signup`)만 사용합니다.
 
-				const res = await fetch(`${BASE_URL}/api/auth/signup`, {
+				const res = await fetch(`/api/auth/signup`, {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(payload),
@@ -143,14 +142,16 @@ export default function AuthForm({ mode }) {
 
 	return (
 		<form className="auth-form-root" onSubmit={handleSubmit}>
-			<h2 className="auth-form-title">{isLogin ? "로그인" : "회원가입"}</h2>
-
-			{error && <div className="auth-form-error">{error}</div>}
-
+			           {" "}
+			<h2 className="auth-form-title">{isLogin ? "로그인" : "회원가입"}</h2>   
+			        {error && <div className="auth-form-error">{error}</div>}         
+			 {" "}
 			{!isLogin && (
 				<>
+					                   {" "}
 					<div className="auth-form-field">
-						<label htmlFor="name">이름</label>
+						                        <label htmlFor="name">이름</label>         
+						             {" "}
 						<input
 							id="name"
 							name="name"
@@ -158,9 +159,12 @@ export default function AuthForm({ mode }) {
 							onChange={handleChange}
 							disabled={loading}
 						/>
+						                   {" "}
 					</div>
+					                   {" "}
 					<div className="auth-form-field">
-						<label htmlFor="studentNumber">학번</label>
+						                        <label htmlFor="studentNumber">학번</label> 
+						                     {" "}
 						<input
 							id="studentNumber"
 							name="studentNumber"
@@ -169,9 +173,12 @@ export default function AuthForm({ mode }) {
 							onChange={handleChange}
 							disabled={loading}
 						/>
+						                   {" "}
 					</div>
+					                   {" "}
 					<div className="auth-form-field">
-						<label htmlFor="phoneNumber">전화번호</label>
+						                       {" "}
+						<label htmlFor="phoneNumber">전화번호</label>                       {" "}
 						<input
 							id="phoneNumber"
 							name="phoneNumber"
@@ -180,9 +187,12 @@ export default function AuthForm({ mode }) {
 							onChange={handleChange}
 							disabled={loading}
 						/>
+						                   {" "}
 					</div>
+					                   {" "}
 					<div className="auth-form-field">
-						<label htmlFor="grade">학년</label>
+						                        <label htmlFor="grade">학년</label>         
+						             {" "}
 						<input
 							id="grade"
 							name="grade"
@@ -192,9 +202,13 @@ export default function AuthForm({ mode }) {
 							onChange={handleChange}
 							disabled={loading}
 						/>
+						                   {" "}
 					</div>
+					                   {" "}
 					<div className="auth-form-field">
-						<label htmlFor="enrollmentStatus">재학상태</label>
+						                       {" "}
+						<label htmlFor="enrollmentStatus">재학상태</label>                 
+						     {" "}
 						<select
 							id="enrollmentStatus"
 							name="enrollmentStatus"
@@ -202,16 +216,19 @@ export default function AuthForm({ mode }) {
 							onChange={handleChange}
 							disabled={loading}
 						>
-							<option value="ENROLLED">재학</option>
-							<option value="LEAVE">휴학</option>
-							<option value="GRADUATED">졸업</option>
+							                            <option value="ENROLLED">재학</option>
+							                            <option value="LEAVE">휴학</option>   
+							                        <option value="GRADUATED">졸업</option>   
+							                   {" "}
 						</select>
+						                   {" "}
 					</div>
+					               {" "}
 				</>
 			)}
-
+			           {" "}
 			<div className="auth-form-field">
-				<label htmlFor="email">이메일</label>
+				                <label htmlFor="email">이메일</label>               {" "}
 				<input
 					id="email"
 					name="email"
@@ -220,9 +237,12 @@ export default function AuthForm({ mode }) {
 					onChange={handleChange}
 					disabled={loading}
 				/>
+				           {" "}
 			</div>
+			           {" "}
 			<div className="auth-form-field">
-				<label htmlFor="password">비밀번호</label>
+				                <label htmlFor="password">비밀번호</label>             
+				 {" "}
 				<input
 					id="password"
 					name="password"
@@ -231,10 +251,13 @@ export default function AuthForm({ mode }) {
 					onChange={handleChange}
 					disabled={loading}
 				/>
+				           {" "}
 			</div>
+			           {" "}
 			{!isLogin && (
 				<div className="auth-form-field">
-					<label htmlFor="confirm">비밀번호 확인</label>
+					                    <label htmlFor="confirm">비밀번호 확인</label>   
+					               {" "}
 					<input
 						id="confirm"
 						name="confirm"
@@ -243,20 +266,25 @@ export default function AuthForm({ mode }) {
 						onChange={handleChange}
 						disabled={loading}
 					/>
+					               {" "}
 				</div>
 			)}
-
+			           {" "}
 			<button className="auth-form-btn" type="submit" disabled={loading}>
-				{isLogin ? "로그인" : "회원가입"}
+				                {isLogin ? "로그인" : "회원가입"}           {" "}
 			</button>
+			           {" "}
 			<div
 				className="auth-form-link"
 				onClick={() => navigate(isLogin ? "/signup" : "/login")}
 			>
+				               {" "}
 				{isLogin
 					? "회원가입이 필요하신가요?"
 					: "이미 계정이 있으신가요? 로그인"}
+				           {" "}
 			</div>
+			       {" "}
 		</form>
 	);
 }
