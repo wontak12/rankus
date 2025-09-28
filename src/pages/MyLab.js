@@ -208,7 +208,7 @@ function MyLab() {
 			<div className="mylab-grid">
 				<CalendarSection labId={lab.id} />
 				<VotePreview />
-				<NoticePreview />
+				<NoticePreview labId={lab.id} />
 				<FilePreview />
 				<MemberSection labId={lab.id} />
 				<ApplicationsPreview labId={lab.id} />

@@ -13,14 +13,15 @@ import NoLab from "./pages/NoLab.js";
 import Profile from "./pages/Profile.js";
 import Signup from "./pages/Signup.js";
 
+import NoticeDetail from "./components/mylab//NoticeDetail.js";
 import Attendance from "./components/mylab/Attendance.js";
 import Interview from "./components/mylab/Interview";
+import Schedule from "./components/mylab/schedule.js";
 import { useAuth } from "./contexts/AuthContext";
 import JoinLab from "./pages/JoinLab.js";
 import JoinRequestsPage from "./pages/JoinRequestsPage.js";
 import MemberDetail from "./pages/MemberDetail.js";
 import MemberList from "./pages/MemberList.js";
-import NoticeDetail from "./pages/NoticeDetail.js";
 import NoticeForm from "./pages/NoticeForm.js";
 import NoticePage from "./pages/NoticePage.js";
 import VotePage from "./pages/VotePage.js";
@@ -54,6 +55,8 @@ function App() {
 						element={<JoinLab />}
 					/>
 
+					<Route path="/mylab/schedule" element={<Schedule />} />
+
 					<Route path="/create-lab" element={<CreateLab />} />
 					<Route path="/my-lab" element={<MyLab />} />
 					<Route path="/my-lab/no-lab" element={<NoLab />} />
@@ -65,7 +68,7 @@ function App() {
 					<Route path="/notice/:id" element={<NoticeDetail />} />
 					<Route path="/members" element={<MemberList />} />
 					<Route path="/member/:id" element={<MemberDetail />} />
-
+					<Route path="/notices/:labId/:noticeId" element={<NoticeDetail />} />
 					{/* 인터뷰 리스트(슬롯 설정 화면 등) */}
 					<Route path="/lab/:labId/interviews" element={<Interview />} />
 					<Route path="/lab/:labId/attendance" element={<Attendance />} />
