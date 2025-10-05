@@ -1,6 +1,5 @@
 import { QRCodeSVG as QRCode } from "qrcode.react";
 import { useCallback, useEffect, useState } from "react";
-// useLocation을 추가로 import 합니다.
 import { useLocation, useParams } from "react-router-dom";
 import api from "../../api";
 
@@ -22,7 +21,7 @@ function Attendance() {
 	const [qrCodeData, setQrCodeData] = useState("");
 	const [isQrLoading, setIsQrLoading] = useState(false);
 
-	// --- 여기부터 추가된 코드 부분 (사용자 출석 처리용) ---
+	// --- 사용자 출석 처리용 코드 ---
 	const location = useLocation();
 	const queryParams = new URLSearchParams(location.search);
 	const qrToken = queryParams.get("qt");
@@ -31,12 +30,20 @@ function Attendance() {
 	const [attendError, setAttendError] = useState(null);
 	const [attendSuccess, setAttendSuccess] = useState(null);
 
-	// 사용자 출석 처리를 위한 useEffect (URL에 qt가 있을 때만 실행됨)
 	useEffect(() => {
-		if (!qrToken) return; // qt 파라미터가 없으면 이 로직을 실행하지 않음
+		if (!qrToken) return;
 
 		const processAttendance = async () => {
 			try {
+				const accessToken = localStorage.getItem("accessToken");
+				if (!accessToken) {
+					const currentUrl = window.location.href;
+					window.location.href = `/login?redirectUrl=${encodeURIComponent(
+						currentUrl
+					)}`;
+					return;
+				}
+
 				const resolveResponse = await api.get(
 					`/api/attendance/qr/resolve?token=${qrToken}`
 				);
@@ -44,11 +51,6 @@ function Attendance() {
 					throw new Error(
 						resolveResponse.data?.data?.reason || "유효하지 않은 QR 코드입니다."
 					);
-				}
-
-				const accessToken = localStorage.getItem("accessToken");
-				if (!accessToken) {
-					throw new Error("출석을 위해 로그인이 필요합니다.");
 				}
 
 				await api.post(
@@ -60,6 +62,8 @@ function Attendance() {
 				);
 
 				setAttendSuccess("✅ 출석 처리가 성공적으로 완료되었습니다!");
+				// ✨ alert 추가
+				alert("출석 체크가 완료되었습니다.");
 			} catch (err) {
 				const errorMessage =
 					err.response?.data?.message ||
@@ -74,7 +78,7 @@ function Attendance() {
 		processAttendance();
 	}, [qrToken]);
 
-	// --- 기존 코드 부분 (관리자 화면용 함수들) ---
+	// --- 기존 관리자 화면용 함수들 (이하 생략된 부분은 이전과 동일) ---
 	const fetchData = useCallback(async () => {
 		setListLoading(true);
 		setListError(null);
@@ -96,12 +100,12 @@ function Attendance() {
 	}, [labId]);
 
 	useEffect(() => {
-		if (qrToken) return; // qt가 있으면 관리자 로직 실행 안 함
+		if (qrToken) return;
 		fetchData();
 	}, [fetchData, qrToken]);
 
 	useEffect(() => {
-		if (qrToken || !selectedSessionId) return; // qt가 있거나 세션이 선택 안됐으면 실행 안 함
+		if (qrToken || !selectedSessionId) return;
 		const fetchDetails = async () => {
 			setDetailLoading(true);
 			setDetailError(null);
@@ -190,9 +194,6 @@ function Attendance() {
 		}
 	};
 
-	// --- 화면을 그리는(Render) 부분 ---
-
-	// URL에 qt 파라미터가 있을 경우, 사용자 출석 처리 화면을 보여줌
 	if (qrToken) {
 		return (
 			<div style={{ padding: "2rem", textAlign: "center", fontSize: "1.2rem" }}>
@@ -204,7 +205,6 @@ function Attendance() {
 		);
 	}
 
-	// URL에 qt 파라미터가 없을 경우, 기존 관리자 화면을 보여줌
 	const renderDetailView = () => {
 		if (detailLoading) return <div>세부 정보 로딩 중...</div>;
 		if (!sessionDetails) return <div>세션 정보를 찾을 수 없습니다.</div>;
