@@ -72,6 +72,7 @@ function App() {
 					{/* 인터뷰 리스트(슬롯 설정 화면 등) */}
 					<Route path="/lab/:labId/interviews" element={<Interview />} />
 					<Route path="/lab/:labId/attendance" element={<Attendance />} />
+                	<Route path="/attend" element={<Attendance />} />
 
 					<Route path="/join-requests" element={<JoinRequestsPage />} />
 				</Route>
