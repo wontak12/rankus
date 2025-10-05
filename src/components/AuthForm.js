@@ -1,6 +1,6 @@
-// src/components/AuthForm.js
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+// useLocation을 추가로 import 합니다.
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../styles/AuthForm.css";
 
@@ -9,6 +9,8 @@ import "../styles/AuthForm.css";
 
 export default function AuthForm({ mode }) {
 	const navigate = useNavigate();
+	// location 객체를 사용하기 위해 useLocation hook을 호출합니다.
+	const location = useLocation();
 	const { setUser } = useAuth();
 	const isLogin = mode === "login";
 
@@ -72,7 +74,22 @@ export default function AuthForm({ mode }) {
 				console.log("[AuthForm] setUser 호출, user 정보:", json.data.user);
 				setUser(json.data.user);
 
-				navigate("/home");
+				// ==========================================================
+				// ✨ 여기가 기능이 추가된 부분입니다. ✨
+				// ==========================================================
+
+				// 1. URL 쿼리에서 'redirectUrl' 값을 찾아봅니다.
+				const params = new URLSearchParams(location.search);
+				const redirectUrl = params.get("redirectUrl");
+
+				// 2. 만약 redirectUrl이 있으면 그 주소로 이동시키고,
+				if (redirectUrl) {
+					// 페이지를 새로고침하며 이동시켜야 출석 페이지의 로직이 다시 실행됩니다.
+					window.location.href = redirectUrl;
+				} else {
+					// redirectUrl이 없으면 원래 코드처럼 /home으로 보냅니다.
+					navigate("/home");
+				}
 			} else {
 				// ▶ 회원가입
 				const {
@@ -142,29 +159,26 @@ export default function AuthForm({ mode }) {
 
 	return (
 		<form className="auth-form-root" onSubmit={handleSubmit}>
-			           {" "}
-			<h2 className="auth-form-title">{isLogin ? "로그인" : "회원가입"}</h2>   
-			        {error && <div className="auth-form-error">{error}</div>}         
-			 {" "}
+			{" "}
+			<h2 className="auth-form-title">{isLogin ? "로그인" : "회원가입"}</h2>
+			{error && <div className="auth-form-error">{error}</div>}{" "}
 			{!isLogin && (
 				<>
-					                   {" "}
+					{" "}
 					<div className="auth-form-field">
-						                        <label htmlFor="name">이름</label>         
-						             {" "}
+						{" "}
+						<label htmlFor="name">이름</label>{" "}
 						<input
 							id="name"
 							name="name"
 							value={fields.name}
 							onChange={handleChange}
 							disabled={loading}
-						/>
-						                   {" "}
-					</div>
-					                   {" "}
+						/>{" "}
+					</div>{" "}
 					<div className="auth-form-field">
-						                        <label htmlFor="studentNumber">학번</label> 
-						                     {" "}
+						{" "}
+						<label htmlFor="studentNumber">학번</label>{" "}
 						<input
 							id="studentNumber"
 							name="studentNumber"
@@ -172,13 +186,11 @@ export default function AuthForm({ mode }) {
 							value={fields.studentNumber}
 							onChange={handleChange}
 							disabled={loading}
-						/>
-						                   {" "}
-					</div>
-					                   {" "}
+						/>{" "}
+					</div>{" "}
 					<div className="auth-form-field">
-						                       {" "}
-						<label htmlFor="phoneNumber">전화번호</label>                       {" "}
+						{" "}
+						<label htmlFor="phoneNumber">전화번호</label>{" "}
 						<input
 							id="phoneNumber"
 							name="phoneNumber"
@@ -186,13 +198,11 @@ export default function AuthForm({ mode }) {
 							value={fields.phoneNumber}
 							onChange={handleChange}
 							disabled={loading}
-						/>
-						                   {" "}
-					</div>
-					                   {" "}
+						/>{" "}
+					</div>{" "}
 					<div className="auth-form-field">
-						                        <label htmlFor="grade">학년</label>         
-						             {" "}
+						{" "}
+						<label htmlFor="grade">학년</label>{" "}
 						<input
 							id="grade"
 							name="grade"
@@ -201,14 +211,11 @@ export default function AuthForm({ mode }) {
 							value={fields.grade}
 							onChange={handleChange}
 							disabled={loading}
-						/>
-						                   {" "}
-					</div>
-					                   {" "}
+						/>{" "}
+					</div>{" "}
 					<div className="auth-form-field">
-						                       {" "}
-						<label htmlFor="enrollmentStatus">재학상태</label>                 
-						     {" "}
+						{" "}
+						<label htmlFor="enrollmentStatus">재학상태</label>{" "}
 						<select
 							id="enrollmentStatus"
 							name="enrollmentStatus"
@@ -216,19 +223,16 @@ export default function AuthForm({ mode }) {
 							onChange={handleChange}
 							disabled={loading}
 						>
-							                            <option value="ENROLLED">재학</option>
-							                            <option value="LEAVE">휴학</option>   
-							                        <option value="GRADUATED">졸업</option>   
-							                   {" "}
-						</select>
-						                   {" "}
-					</div>
-					               {" "}
+							<option value="ENROLLED">재학</option>
+							<option value="LEAVE">휴학</option>
+							<option value="GRADUATED">졸업</option>{" "}
+						</select>{" "}
+					</div>{" "}
 				</>
-			)}
-			           {" "}
+			)}{" "}
 			<div className="auth-form-field">
-				                <label htmlFor="email">이메일</label>               {" "}
+				{" "}
+				<label htmlFor="email">이메일</label>{" "}
 				<input
 					id="email"
 					name="email"
@@ -236,13 +240,11 @@ export default function AuthForm({ mode }) {
 					value={fields.email}
 					onChange={handleChange}
 					disabled={loading}
-				/>
-				           {" "}
-			</div>
-			           {" "}
+				/>{" "}
+			</div>{" "}
 			<div className="auth-form-field">
-				                <label htmlFor="password">비밀번호</label>             
-				 {" "}
+				{" "}
+				<label htmlFor="password">비밀번호</label>{" "}
 				<input
 					id="password"
 					name="password"
@@ -250,14 +252,12 @@ export default function AuthForm({ mode }) {
 					value={fields.password}
 					onChange={handleChange}
 					disabled={loading}
-				/>
-				           {" "}
-			</div>
-			           {" "}
+				/>{" "}
+			</div>{" "}
 			{!isLogin && (
 				<div className="auth-form-field">
-					                    <label htmlFor="confirm">비밀번호 확인</label>   
-					               {" "}
+					{" "}
+					<label htmlFor="confirm">비밀번호 확인</label>{" "}
 					<input
 						id="confirm"
 						name="confirm"
@@ -265,26 +265,22 @@ export default function AuthForm({ mode }) {
 						value={fields.confirm}
 						onChange={handleChange}
 						disabled={loading}
-					/>
-					               {" "}
+					/>{" "}
 				</div>
-			)}
-			           {" "}
+			)}{" "}
 			<button className="auth-form-btn" type="submit" disabled={loading}>
-				                {isLogin ? "로그인" : "회원가입"}           {" "}
-			</button>
-			           {" "}
+				{" "}
+				{isLogin ? "로그인" : "회원가입"}{" "}
+			</button>{" "}
 			<div
 				className="auth-form-link"
 				onClick={() => navigate(isLogin ? "/signup" : "/login")}
 			>
-				               {" "}
+				{" "}
 				{isLogin
 					? "회원가입이 필요하신가요?"
-					: "이미 계정이 있으신가요? 로그인"}
-				           {" "}
-			</div>
-			       {" "}
+					: "이미 계정이 있으신가요? 로그인"}{" "}
+			</div>{" "}
 		</form>
 	);
 }
