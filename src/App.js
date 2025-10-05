@@ -13,6 +13,8 @@ import NoLab from "./pages/NoLab.js";
 import Profile from "./pages/Profile.js";
 import Signup from "./pages/Signup.js";
 
+import MyCalendar from "./components/mylab/MyCalendar"; // 방금 만든 파일 import
+
 import NoticeDetail from "./components/mylab//NoticeDetail.js";
 import Attendance from "./components/mylab/Attendance.js";
 import Interview from "./components/mylab/Interview";
@@ -73,6 +75,7 @@ function App() {
 					<Route path="/lab/:labId/interviews" element={<Interview />} />
 					<Route path="/lab/:labId/attendance" element={<Attendance />} />
                 	<Route path="/attend" element={<Attendance />} />
+                	<Route path="/lab/:labId/calendar" element={<MyCalendar />} />
 
 					<Route path="/join-requests" element={<JoinRequestsPage />} />
 				</Route>

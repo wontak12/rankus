@@ -215,6 +215,28 @@ function MyLab() {
 						일정 페이지로 이동
 					</button>
 				</div>
+
+				<div style={{ margin: "12px 0" }}>
+					<button
+						className="mylab-interview-btn mylab-attendance-btn"
+						onClick={() => {
+							navigate(`/lab/${lab.id}/attendance`);
+						}}
+					>
+						출석 페이지로 이동
+					</button>
+				</div>
+
+				<div style={{ margin: "12px 0" }}>
+					<button
+						className="mylab-interview-btn mylab-calendar-btn"
+						onClick={() => {
+							navigate(`/lab/${lab.id}/calendar`);
+						}}
+					>
+						달력페이지로 이동
+					</button>
+				</div>
 			</div>
 
 			{/* 기능 섹션들 */}

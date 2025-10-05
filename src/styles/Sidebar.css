@@ -1,54 +1,54 @@
 .sidebar {
-  background: #fff;
-  width: 220px;
-  height: 100vh;
-  color: #bea7f3;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: fixed;
-  box-shadow: 0 2px 8px rgba(26, 35, 126, 0.07);
+	background: #fff;
+	width: 180px;
+	height: 100vh;
+	color: #bea7f3;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	position: fixed;
+	box-shadow: 0 2px 8px rgba(26, 35, 126, 0.07);
 }
 
 .sidebar-logo img {
-  width: 100px;
-  height: auto;
-  margin-bottom: 20px;
+	width: 100px;
+	height: auto;
+	margin-bottom: 20px;
 }
 
 .sidebar-nav {
-  width: 100%;
+	width: 100%;
 }
 
 .sidebar-nav ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  width: 100%;
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	width: 100%;
 }
 
 .sidebar-nav li a {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 20px;
-  color: #000000d9;
-  text-decoration: none;
-  font-size: 16px;
-  transition: background 0.3s, color 0.3s;
-  height: 2rem;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 20px;
+	color: #000000d9;
+	text-decoration: none;
+	font-size: 16px;
+	transition: background 0.3s, color 0.3s;
+	height: 2rem;
 }
 
 .sidebar-nav li a:hover {
-  background: #67509c;
-  color: #fff;
+	background: #67509c;
+	color: #fff;
 }
 
 .sidebar-nav li a.active {
-  background: #67509c;
-  color: #fff;
+	background: #67509c;
+	color: #fff;
 }
 
 .icon {
-  font-size: 18px;
+	font-size: 18px;
 }
