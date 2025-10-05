@@ -30,29 +30,37 @@ function Attendance() {
 	const [attendError, setAttendError] = useState(null);
 	const [attendSuccess, setAttendSuccess] = useState(null);
 
+	// ==========================================================
+	// ✨ 여기가 디버깅 코드가 추가된 useEffect 부분입니다.
+	// ==========================================================
 	useEffect(() => {
 		if (!qrToken) return;
 
 		const processAttendance = async () => {
+			console.log("1. 출석 처리 로직을 시작합니다.");
 			try {
 				const accessToken = localStorage.getItem("accessToken");
 				if (!accessToken) {
+					console.log("2. 로그인이 되어있지 않아 로그인 페이지로 이동합니다.");
 					const currentUrl = window.location.href;
 					window.location.href = `/login?redirectUrl=${encodeURIComponent(
 						currentUrl
 					)}`;
 					return;
 				}
+				console.log("2. 로그인 상태가 확인되었습니다.");
 
 				const resolveResponse = await api.get(
 					`/api/attendance/qr/resolve?token=${qrToken}`
 				);
+				console.log("3. QR 토큰 유효성 검사 완료:", resolveResponse.data);
 				if (!resolveResponse.data?.data?.valid) {
 					throw new Error(
 						resolveResponse.data?.data?.reason || "유효하지 않은 QR 코드입니다."
 					);
 				}
 
+				console.log("4. 최종 출석 체크 API를 호출합니다.");
 				await api.post(
 					"/api/attendance/check",
 					{ token: qrToken },
@@ -60,17 +68,22 @@ function Attendance() {
 						headers: { Authorization: `Bearer ${accessToken}` },
 					}
 				);
+				console.log("5. 출석 체크 API 호출 성공!");
 
 				setAttendSuccess("✅ 출석 처리가 성공적으로 완료되었습니다!");
-				// ✨ alert 추가
+
+				console.log("6. Alert를 띄우기 직전입니다.");
 				alert("출석 체크가 완료되었습니다.");
+				console.log("7. Alert를 확인했습니다.");
 			} catch (err) {
 				const errorMessage =
 					err.response?.data?.message ||
 					err.message ||
 					"알 수 없는 오류가 발생했습니다.";
+				console.error("💥 출석 처리 중 에러 발생:", errorMessage);
 				setAttendError(`오류: ${errorMessage}`);
 			} finally {
+				console.log("8. 모든 출석 로직을 마칩니다.");
 				setAttendLoading(false);
 			}
 		};
@@ -78,7 +91,7 @@ function Attendance() {
 		processAttendance();
 	}, [qrToken]);
 
-	// --- 기존 관리자 화면용 함수들 (이하 생략된 부분은 이전과 동일) ---
+	// --- 기존 관리자 화면용 함수들 (이하 동일) ---
 	const fetchData = useCallback(async () => {
 		setListLoading(true);
 		setListError(null);
