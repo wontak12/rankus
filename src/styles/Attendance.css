@@ -1,35 +1,35 @@
-/* 출석 관리 페이지 스타일 - v2.0 - 모바일 반응형 업데이트 */
+/* 출석 관리 페이지 스타일 */
 
 /* 메인 컨테이너 */
 .attendance-container {
   padding: 2rem;
-  max-width: 120rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 /* 출석 카드 스타일 */
 .attendance-card {
   background: #fff;
-  border-radius: 1.6rem;
-  box-shadow: 0 0.4rem 1.6rem rgba(0, 0, 0, 0.08);
-  margin: 3.2rem auto;  
-  padding: 2.4rem 3.2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin: 32px auto;  
+  padding: 24px 32px;
 }
 
 .attendance-card-small {
   background: #fff;
-  border-radius: 1.6rem;
-  box-shadow: 0 0.4rem 1.6rem rgba(0, 0, 0, 0.08);
-  margin: 1.6rem 0;
-  padding: 2rem 2.4rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin: 16px 0;
+  padding: 20px 24px;
 }
 
 /* 헤더 영역 */
 .attendance-header {
   display: flex;
-  gap: 1.2rem;
+  gap: 12px;
   align-items: center;
-  margin-bottom: 2.4rem;
+  margin-bottom: 24px;
 }
 
 .attendance-title {
@@ -40,7 +40,7 @@
 }
 
 .attendance-subtitle {
-  margin: 0 0 1.6rem 0;
+  margin: 0 0 16px 0;
   font-size: 1.2rem;
   font-weight: 600;
   color: #67509c;
@@ -49,31 +49,31 @@
 /* 폼 스타일 */
 .attendance-form {
   background: #f7faff;
-  border-radius: 1.2rem;
-  padding: 1.8rem;
-  margin-bottom: 2.4rem;
-  border: 0.1rem solid #e3e3e3;
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 24px;
+  border: 1px solid #e3e3e3;
 }
 
 .attendance-form-grid {
   display: flex;
   flex-direction: column;
-  gap: 1.6rem;
-  margin-bottom: 1.6rem;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .attendance-form-row {
   display: flex;
   align-items: center;
-  gap: 1.2rem;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .attendance-form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
-  min-width: 20rem;
+  gap: 6px;
+  min-width: 200px;
 }
 
 .attendance-form-label {
@@ -83,9 +83,9 @@
 }
 
 .attendance-form-input {
-  padding: 1rem 1.4rem;
-  border: 0.1rem solid #ddd;
-  border-radius: 0.8rem;
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
@@ -93,7 +93,7 @@
 .attendance-form-input:focus {
   outline: none;
   border-color: #67509c;
-  box-shadow: 0 0 0 0.3rem rgba(103, 80, 156, 0.1);
+  box-shadow: 0 0 0 3px rgba(103, 80, 156, 0.1);
 }
 
 .attendance-form-input::placeholder {
@@ -105,21 +105,21 @@
   background: #67509c;
   color: #fff;
   border: none;
-  border-radius: 0.8rem;
-  padding: 1.2rem 2.4rem;
+  border-radius: 8px;
+  padding: 12px 24px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   display: inline-flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: 8px;
 }
 
 .attendance-btn:hover:not(:disabled) {
   background: #5a4389;
-  transform: translateY(-0.1rem);
-  box-shadow: 0 0.4rem 1.2rem rgba(103, 80, 156, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(103, 80, 156, 0.3);
 }
 
 .attendance-btn:disabled {
@@ -161,25 +161,25 @@
 .attendance-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1.6rem;
+  margin-top: 16px;
   background: #fff;
-  border-radius: 1.2rem;
+  border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .attendance-table th {
   background: #f8f9fa;
   color: #b198eb;
   font-weight: 600;
-  padding: 1.6rem;
+  padding: 16px;
   text-align: center;
-  border-bottom: 0.2rem solid #e9ecef;
+  border-bottom: 2px solid #e9ecef;
 }
 
 .attendance-table td {
-  padding: 1.4rem 1.6rem;
-  border-bottom: 0.1rem solid #e9ecef;
+  padding: 14px 16px;
+  border-bottom: 1px solid #e9ecef;
   color: #333;
   transition: background-color 0.2s;
 }
@@ -196,8 +196,8 @@
 /* 상태 배지 */
 .attendance-status-badge {
   display: inline-block;
-  padding: 0.4rem 1.2rem;
-  border-radius: 1.6rem;
+  padding: 4px 12px;
+  border-radius: 16px;
   font-size: 0.85rem;
   font-weight: 600;
   text-transform: uppercase;
@@ -333,46 +333,30 @@
 .attendance-session-info {
   color: #666;
   font-size: 0.9rem;
-  margin-top: 0.4rem;
+  margin-top: 4px;
 }
 
 /* 출석 체크 완료 페이지 */
 .attendance-check-container {
-  text-align: center !important;
-  padding: 4rem 2rem !important;
-  min-height: 50vh !important;
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  background: #f8f9ff !important;
-  max-width: 100% !important;
-  margin: 0 auto !important;
+  text-align: center;
+  padding: 4rem 2rem;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .attendance-check-icon {
-  font-size: 4rem !important;
-  margin-bottom: 2.4rem !important;
-  animation: bounce 1s ease-in-out;
+  font-size: 4rem;
+  margin-bottom: 24px;
 }
 
 .attendance-check-title {
-  font-size: 2rem !important;
-  font-weight: 700 !important;
-  color: #67509c !important;
-  margin-bottom: 1.6rem !important;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-1rem);
-  }
-  60% {
-    transform: translateY(-0.5rem);
-  }
+  font-size: 2rem;
+  font-weight: 700;
+  color: #67509c;
+  margin-bottom: 16px;
 }
 
 .attendance-check-message {
@@ -383,6 +367,10 @@
 
 /* 반응형 디자인 */
 @media (max-width: 768px) {
+
+  .sidebar{
+    display: none;
+  }
   .attendance-container {
     padding: 1rem;
   }
@@ -423,198 +411,22 @@
 /* 빈 상태 */
 .attendance-empty-state {
   text-align: center;
-  padding: 4.8rem 2.4rem;
+  padding: 48px 24px;
   color: #666;
 }
 
 .attendance-empty-icon {
   font-size: 3rem;
-  margin-bottom: 1.6rem;
+  margin-bottom: 16px;
   opacity: 0.5;
 }
 
 .attendance-empty-message {
   font-size: 1.1rem;
-  margin-bottom: 0.8rem;
+  margin-bottom: 8px;
 }
 
 .attendance-empty-description {
   font-size: 0.95rem;
   color: #888;
-}
-
-/* QR 코드 및 출석 체크 페이지 모바일 반응형 */
-@media (max-width: 76.8rem) {
-  .attendance-container {
-    padding: 1rem;
-  }
-  
-  .attendance-card {
-    margin: 1rem auto;
-    padding: 1.5rem 2rem;
-    border-radius: 1.2rem;
-  }
-  
-  .attendance-card-small {
-    padding: 1.2rem 1.5rem;
-    margin: 1rem 0;
-  }
-  
-  .attendance-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.8rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .attendance-title {
-    font-size: 1.4rem;
-  }
-  
-  .attendance-subtitle {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .attendance-form {
-    padding: 1.2rem;
-  }
-  
-  .attendance-form-row {
-    flex-direction: column;
-    gap: 0.8rem;
-  }
-  
-  .attendance-form-group {
-    min-width: auto;
-  }
-  
-  .attendance-btn {
-    padding: 1rem 1.5rem;
-    font-size: 0.95rem;
-  }
-  
-  .attendance-qr-section {
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  .attendance-qr-container {
-    max-width: 100%;
-    overflow: hidden;
-    padding: 1rem;
-  }
-  
-  .attendance-qr-info {
-    font-size: 0.8rem;
-    word-break: break-all;
-    margin-top: 0.8rem;
-  }
-  
-  .attendance-table {
-    font-size: 0.85rem;
-    display: block;
-    overflow-x: auto;
-    white-space: nowrap;
-  }
-  
-  .attendance-empty-state {
-    padding: 2rem 1rem;
-  }
-}
-
-@media (max-width: 48rem) {
-  .attendance-container {
-    padding: 0.5rem;
-  }
-  
-  .attendance-card {
-    margin: 0.5rem auto;
-    padding: 1rem 1.2rem;
-  }
-  
-  .attendance-card-small {
-    padding: 1rem;
-    margin: 0.8rem 0;
-  }
-  
-  .attendance-title {
-    font-size: 1.2rem;
-  }
-  
-  .attendance-subtitle {
-    font-size: 1rem;
-  }
-  
-  .attendance-form {
-    padding: 1rem;
-  }
-  
-  .attendance-btn {
-    padding: 0.8rem 1.2rem;
-    font-size: 0.9rem;
-    width: 100%;
-  }
-  
-  .attendance-qr-container canvas,
-  .attendance-qr-container svg {
-    max-width: 20rem !important;
-    max-height: 20rem !important;
-    width: 100% !important;
-    height: auto !important;
-  }
-  
-  .attendance-form-input {
-    padding: 0.8rem 1rem;
-    font-size: 0.95rem;
-  }
-  
-  .attendance-table th,
-  .attendance-table td {
-    padding: 0.8rem 0.6rem;
-    font-size: 0.8rem;
-  }
-  
-  /* 출석 체크 완료 페이지 */
-  .attendance-check-container {
-    padding: 1rem !important;
-    text-align: center !important;
-    min-height: 40vh !important;
-  }
-  
-  .attendance-check-icon {
-    font-size: 3rem !important;
-    margin-bottom: 1rem !important;
-  }
-  
-  .attendance-check-title {
-    font-size: 1.4rem !important;
-    margin-bottom: 1rem !important;
-  }
-}
-
-@media (max-width: 32rem) {
-  .attendance-card {
-    margin: 0.2rem;
-    padding: 0.8rem 1rem;
-  }
-  
-  .attendance-title {
-    font-size: 1.1rem;
-  }
-  
-  .attendance-qr-container {
-    padding: 0.5rem;
-  }
-  
-  .attendance-qr-container canvas,
-  .attendance-qr-container svg {
-    max-width: 16rem !important;
-    max-height: 16rem !important;
-  }
-  
-  .attendance-btn {
-    padding: 0.7rem 1rem;
-    font-size: 0.85rem;
-  }
 }

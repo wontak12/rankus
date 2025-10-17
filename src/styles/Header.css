@@ -137,3 +137,31 @@
 .modal-overlay {
   z-index: 9999; /* 충분히 높게 변경 */
 }
+
+@media (max-width: 900px) {
+
+  .rankus-header-profile-group{
+    gap: 0.3rem;
+    align-items: center;
+  }
+
+	.rankus-header-pending-btn, .rankus-header-logout-btn {
+    font-size: 0.7rem;
+    width: 5rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  .rankus-header-profile{
+    width: 3rem;
+    text-align: center;
+  }
+
+  .rankus-header-profile-name{
+    font-size: 1rem;
+  }
+
+  .rankus-header-logo-text{
+    margin: 0;
+  }
+}
