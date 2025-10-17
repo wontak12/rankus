@@ -116,3 +116,291 @@
   font-size: 1.02rem;
   flex: 1;
 }
+
+/* 캘린더 카드 헤더 */
+.mylab-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.mylab-card-date {
+  font-size: 0.9rem;
+  color: #67509c;
+  font-weight: 600;
+}
+
+/* 캘린더 태스크 목록 */
+.calendar-tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.calendar-task-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  background: #f8f9ff;
+  border-radius: 0.8rem;
+  border-left: 0.3rem solid #67509c;
+}
+
+.calendar-task-time {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #67509c;
+  min-width: 4rem;
+}
+
+.calendar-task-content {
+  flex: 1;
+  display: flex;
+  gap: 0.2rem;
+}
+
+.calendar-task-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #241731;
+}
+
+.calendar-task-type {
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.4rem;
+  display: inline-block;
+  width: fit-content;
+}
+
+.calendar-task-type-meeting {
+  background: #e3f2fd;
+  color: #1976d2;
+}
+
+.calendar-task-type-task {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.calendar-task-type-study {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+/* 캘린더 빈 상태 */
+.calendar-empty-state {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #666;
+}
+
+.calendar-empty-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.calendar-empty-message {
+  font-size: 1rem;
+  color: #888;
+}
+
+/* 전체 캘린더 보기 버튼 */
+.calendar-view-full-btn {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  background: #67509c;
+  color: #fff;
+  border: none;
+  border-radius: 0.8rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: auto;
+}
+
+.calendar-view-full-btn:hover {
+  background: #5a4389;
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.4rem 1.2rem rgba(103, 80, 156, 0.3);
+}
+
+/* 모바일 반응형 */
+@media (max-width: 768px) {
+  .mylab-container {
+    padding: 1.5rem 1rem;
+  }
+  
+  .mylab-header-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  
+  .mylab-header-img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .mylab-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  
+  .calendar-task-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .calendar-task-time {
+    min-width: auto;
+  }
+}
+
+/* 면접 신청자 카드 스타일 */
+.applications-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.application-item {
+  padding: 0.5rem;
+  background: #f8f9ff;
+  border-radius: 0.8rem;
+  border-left: 0.3rem solid #67509c;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.application-item:hover {
+  background: #f0f2ff;
+  transform: translateY(-0.1rem);
+  box-shadow: 0 0.2rem 0.8rem rgba(103, 80, 156, 0.15);
+}
+
+.application-item-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.5rem;
+}
+
+.application-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: #67509c;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.application-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.application-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #241731;
+}
+
+.application-details {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.application-status {
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.3rem 0.8rem;
+  border-radius: 1rem;
+  white-space: nowrap;
+}
+
+.application-status-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.application-status-approved {
+  background: #d1edff;
+  color: #0c63e4;
+}
+
+.application-status-rejected {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.applications-empty {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: #888;
+}
+
+.applications-empty-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  opacity: 0.5;
+}
+
+.applications-loading {
+  text-align: center;
+  padding: 1rem;
+  color: #67509c;
+}
+
+.see-more {
+  color: #67509C;
+  cursor: pointer;
+  font-weight: 700;
+  margin-top: 0.7rem;
+  display: inline-block;
+
+}
+
+
+/* 모바일에서 면접 신청자 카드 */
+@media (max-width: 768px) {
+  .application-item {
+    padding: 0.8rem;
+  }
+  
+  .application-avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+  
+  .application-name {
+    font-size: 0.95rem;
+  }
+  
+  .application-details {
+    font-size: 0.8rem;
+  }
+  
+  .application-status {
+    font-size: 0.85rem;
+    padding: 0.2rem 0.6rem;
+  }
+}

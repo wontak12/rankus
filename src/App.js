@@ -1,4 +1,4 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { Route, BrowserRouter as Router, Routes, Navigate, useParams } from "react-router-dom";
 import Header from "./components/Header";
 import Layout from "./components/Layout.js";
 import CreateLab from "./pages/CreateLab.js";
@@ -27,6 +27,12 @@ import MemberList from "./pages/MemberList.js";
 import NoticeForm from "./pages/NoticeForm.js";
 import NoticePage from "./pages/NoticePage.js";
 import VotePage from "./pages/VotePage.js";
+
+// Interview 페이지를 Calendar로 리다이렉트하는 컴포넌트
+function InterviewRedirect() {
+	const { labId } = useParams();
+	return <Navigate to={`/lab/${labId}/calendar`} replace />;
+}
 
 function App() {
 	const { user } = useAuth();
@@ -71,8 +77,11 @@ function App() {
 					<Route path="/members" element={<MemberList />} />
 					<Route path="/member/:id" element={<MemberDetail />} />
 					<Route path="/notices/:labId/:noticeId" element={<NoticeDetail />} />
-					{/* 인터뷰 리스트(슬롯 설정 화면 등) */}
-					<Route path="/lab/:labId/interviews" element={<Interview />} />
+					{/* 인터뷰 기능이 캘린더로 통합됨 - 리다이렉트 */}
+					<Route 
+						path="/lab/:labId/interviews" 
+						element={<InterviewRedirect />} 
+					/>
 					<Route path="/lab/:labId/attendance" element={<Attendance />} />
                 	<Route path="/attend" element={<Attendance />} />
                 	<Route path="/lab/:labId/calendar" element={<MyCalendar />} />

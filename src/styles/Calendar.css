@@ -404,3 +404,15 @@
     justify-content: center;
   }
 }
+
+/* 슬롯 패널 모달 스타일 */
+.slots-panel-modal {
+  max-width: 800px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+
+.slots-panel-modal .calendar-modal-content {
+  max-height: 60vh;
+  overflow-y: auto;
+}

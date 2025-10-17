@@ -85,11 +85,11 @@ export default function ApplicationsPreview({ labId }) {
 		app?.userEmail ||
 		(app?.userId ? `신청자 #${app.userId}` : `신청 #${app?.id}`);
 
-	// 모달 열릴 때 초기화
+	// 모달 열릴 때 초기화 (단, selectedApp은 유지)
 	useEffect(() => {
 		if (open) {
 			setVisibleCount(20);
-			setSelectedApp(null); // 새로 열면 목록부터
+			// selectedApp은 외부에서 설정된 값 유지
 		}
 	}, [open]);
 
@@ -133,71 +133,37 @@ export default function ApplicationsPreview({ labId }) {
 		const applied = app.appliedAt ? fmtDateTime(app.appliedAt) : "-";
 		const applicant = applicantLabelOf(app);
 
+		const getStatusClass = (status) => {
+			switch (status) {
+				case "APPROVED": return "application-status-approved";
+				case "REJECTED": return "application-status-rejected";
+				default: return "application-status-pending";
+			}
+		};
+
 		return (
 			<li
 				key={app.id}
 				className="application-item"
-				style={{
-					display: "flex",
-					justifyContent: "space-between",
-					alignItems: "center",
-					padding: opts.compact ? 0 : "8px 0",
-					borderBottom: opts.compact
-						? "none"
-						: "1px solid rgba(255,255,255,0.06)",
-					marginBottom: opts.compact ? "0.5rem" : 0,
-					gap: "0.75rem",
-					cursor: "pointer",
-				}}
 				onClick={opts.onClick}
 				title="신청 상세 보기"
 			>
-				<div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-					{!opts.compact && (
-						<div
-							aria-hidden
-							style={{
-								width: 28,
-								height: 28,
-								borderRadius: "50%",
-								background: "#2b2f4a",
-								display: "grid",
-								placeItems: "center",
-								fontSize: 12,
-								color: "#d6e1ff",
-								fontWeight: 700,
-								flexShrink: 0,
-							}}
-						>
-							{String(applicant).trim().charAt(0).toUpperCase()}
+				<div className="application-item-header">
+					
+					
+					<div className="application-info">
+						<div className="application-name">
+							{applicant}
 						</div>
-					)}
-
-					<div style={{ display: "flex", flexDirection: "column" }}>
-						<span style={{ fontWeight: 600 }}>
-							{opts.compact ? `👤 ${applicant}` : `👤 ${applicant}`}
-						</span>
-						<span style={{ color: "#b6c6e3", fontSize: "0.92rem" }}>
+						<div className="application-details">
 							면접 {when} • 신청 {applied}
-						</span>
+						</div>
+					</div>
+
+					<div className={`application-status ${getStatusClass(app.status)}`}>
+						{statusBadge(app.status)}
 					</div>
 				</div>
-
-				<span
-					style={{
-						fontWeight: 700,
-						fontSize: "0.95rem",
-						color:
-							app.status === "APPROVED"
-								? "#00b894"
-								: app.status === "REJECTED"
-								? "#d63031"
-								: "#b6c6e3",
-						whiteSpace: "nowrap",
-					}}
-				>
-					{statusBadge(app.status)}
-				</span>
 			</li>
 		);
 	};
@@ -275,45 +241,51 @@ export default function ApplicationsPreview({ labId }) {
 	return (
 		<>
 			{/* 카드 (미리보기 5명, 클릭 시 모달 오픈) */}
-			<div
-				className="mainlab-card"
-				onClick={() => {
-					if (canOpen) setOpen(true);
-				}}
-				style={{ cursor: canOpen ? "pointer" : "default" }}
-			>
+			<div className="mainlab-card">
 				<div className="mylab-card-title">📝 면접 신청자</div>
 
-				{loading ? (
-					<div style={{ color: "#b6c6e3" }}>불러오는 중…</div>
-				) : error ? (
-					<div style={{ color: "#d66" }}>{error}</div>
-				) : topApps.length === 0 ? (
-					<div style={{ color: "#b6c6e3" }}>현재 신청 내역이 없습니다.</div>
-				) : (
-					<ul style={{ padding: 0, listStyle: "none", margin: 0 }}>
-						{topApps.map((app) =>
-							renderItem(app, {
-								compact: true,
-								onClick: (e) => {
-									e.stopPropagation();
-									setOpen(true);
-									setSelectedApp(app); // 모달 상세
-								},
-							})
-						)}
-					</ul>
-				)}
+				<div className="mylab-card-content">
+					{loading ? (
+						<div className="applications-loading">불러오는 중…</div>
+					) : error ? (
+						<div className="applications-empty">
+							<div className="applications-empty-icon">⚠️</div>
+							<div>{error}</div>
+						</div>
+					) : topApps.length === 0 ? (
+						<div className="applications-empty">
+							<div className="applications-empty-icon">📝</div>
+							<div>현재 신청 내역이 없습니다.</div>
+						</div>
+					) : (
+						<ul className="applications-list">
+							{topApps.map((app) =>
+								renderItem(app, {
+									compact: true,
+									onClick: (e) => {
+										e.stopPropagation();
+										setOpen(true);
+										setSelectedApp(app); // 모달 상세
+									},
+								})
+							)}
+						</ul>
+					)}
 
-				<div
-					className="see-more"
-					style={{ color: "#67509C", fontWeight: 700, marginTop: "0.7rem" }}
-					onClick={(e) => {
-						e.stopPropagation();
-						if (canOpen) setOpen(true);
-					}}
-				>
-					➕ 전체 보기
+					{apps.length > 0 && (
+						<div
+							className="see-more"
+							onClick={(e) => {
+								e.stopPropagation();
+								if (canOpen) {
+									setOpen(true);
+									setSelectedApp(null); // 전체 목록 보기
+								}
+							}}
+						>
+							➕ 전체 보기
+						</div>
+					)}
 				</div>
 			</div>
 

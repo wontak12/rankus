@@ -189,21 +189,7 @@ function MyLab() {
 
 			{/* 인터뷰 페이지로 이동 버튼 */}
 			<div style={{ display: "flex" }}>
-				<div style={{ margin: "12px 0" }}>
-					<button
-						className="mylab-interview-btn"
-						onClick={() => {
-							if (DEBUG_MYLAB)
-								console.log(
-									"[MyLab] go interviews page:",
-									`/lab/${lab.id}/interviews`
-								);
-							navigate(`/lab/${lab.id}/interviews`);
-						}}
-					>
-						면접 일정 페이지로 이동
-					</button>
-				</div>
+				
 
 				<div style={{ margin: "12px 0" }}>
 					<button
@@ -216,27 +202,7 @@ function MyLab() {
 					</button>
 				</div>
 
-				<div style={{ margin: "12px 0" }}>
-					<button
-						className="mylab-interview-btn mylab-attendance-btn"
-						onClick={() => {
-							navigate(`/lab/${lab.id}/attendance`);
-						}}
-					>
-						출석 페이지로 이동
-					</button>
-				</div>
-
-				<div style={{ margin: "12px 0" }}>
-					<button
-						className="mylab-interview-btn mylab-calendar-btn"
-						onClick={() => {
-							navigate(`/lab/${lab.id}/calendar`);
-						}}
-					>
-						달력페이지로 이동
-					</button>
-				</div>
+				
 			</div>
 
 			{/* 기능 섹션들 */}
