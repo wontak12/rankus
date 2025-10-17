@@ -62,6 +62,18 @@
   padding: 24px 32px;
 }
 
+.mainlab-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin: 32px auto;
+  width: 300px;
+  height: 300px;
+  padding: 24px 32px;
+  position: relative;
+  text-align: center;
+}
+
 /* 헤더 영역 */
 .interview-header-row {
   display: flex;
@@ -179,4 +191,12 @@
   display: flex;
   width: 100%;
   gap: 1rem;
+}
+
+.see-more{
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
 }

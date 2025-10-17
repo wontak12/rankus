@@ -10,7 +10,7 @@ function VotePreview() {
   const navigate = useNavigate();
 
   return (
-    <div className="mylab-card">
+    <div className="mainlab-card">
       <div className="mylab-card-title">🗳️ 현재 투표</div>
       <ul style={{padding: 0, listStyle: 'none'}}>
         {activePolls.map((poll) => (

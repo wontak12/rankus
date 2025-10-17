@@ -15,7 +15,7 @@ function FileSection() {
   };
 
   return (
-    <div className="mylab-card">
+    <div className="mainlab-card">
       <div className="mylab-card-title">📁 자료실</div>
       {user?.role === 'admin' && (
         <button className="mylab-join-btn" style={{marginBottom: '1rem'}} onClick={handleUpload}>📤 파일 업로드</button>

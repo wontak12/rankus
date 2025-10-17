@@ -1,0 +1,406 @@
+/* 캘린더 페이지 스타일 */
+
+/* 메인 컨테이너 */
+.calendar-container {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* 캘린더 카드 스타일 */
+.calendar-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin: 0px auto;
+  padding: 24px 32px;
+}
+
+.calendar-card-small {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  margin: 16px 0;
+  padding: 20px 24px;
+}
+
+/* 헤더 영역 */
+.calendar-header {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.calendar-title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #67509c;
+}
+
+.calendar-subtitle {
+  margin: 0 0 16px 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1976d2;
+}
+
+/* FullCalendar 커스터마이징 */
+.fc {
+  font-family: inherit;
+}
+
+.fc-toolbar {
+  margin-bottom: 1.5rem !important;
+}
+
+.fc-toolbar-title {
+  font-size: 1.8rem !important;
+  font-weight: 700 !important;
+  color: #67509c !important;
+}
+
+.fc-button-primary {
+  background-color: #67509c !important;
+  border-color: #67509c !important;
+  color: white !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  padding: 8px 16px !important;
+  transition: all 0.2s !important;
+}
+
+.fc-button-primary:hover:not(:disabled) {
+  background-color: #5a4389 !important;
+  border-color: #5a4389 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(103, 80, 156, 0.3) !important;
+}
+
+.fc-button-primary:disabled {
+  background-color: #bdbdbd !important;
+  border-color: #bdbdbd !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.fc-daygrid-day {
+  transition: background-color 0.2s !important;
+}
+
+.fc-daygrid-day:hover {
+  background-color: #f8f9ff !important;
+}
+
+.fc-daygrid-day-number {
+  color: #333 !important;
+  font-weight: 500 !important;
+  padding: 8px !important;
+}
+
+.fc-day-today {
+  background-color: rgba(103, 80, 156, 0.1) !important;
+}
+
+.fc-day-today .fc-daygrid-day-number {
+  background-color: #67509c !important;
+  color: white !important;
+  border-radius: 50% !important;
+  width: 28px !important;
+  height: 28px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.fc-event {
+  background-color: #67509c !important;
+  border-color: #67509c !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  transition: all 0.2s !important;
+}
+
+.fc-event:hover {
+  background-color: #5a4389 !important;
+  transform: scale(1.02) !important;
+  box-shadow: 0 2px 8px rgba(103, 80, 156, 0.3) !important;
+}
+
+.fc-event-title {
+  font-size: 0.9rem !important;
+}
+
+/* 일정 목록 스타일 */
+.calendar-schedule-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.calendar-schedule-item {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.calendar-schedule-item:hover {
+  border-color: #67509c;
+  box-shadow: 0 4px 16px rgba(103, 80, 156, 0.15);
+  transform: translateY(-1px);
+}
+
+.calendar-schedule-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: #333;
+  margin: 0 0 8px 0;
+}
+
+.calendar-schedule-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.calendar-schedule-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-schedule-time {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 모달 스타일 */
+.calendar-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 99;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: calendar-fade-in 0.2s ease-out;
+}
+
+.calendar-modal {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  width: 90%;
+  max-width: 500px;
+  max-height: 80vh;
+  overflow-y: auto;
+  animation: calendar-modal-slide-up 0.3s ease-out;
+  z-index: 100;
+}
+
+.calendar-modal-header {
+  padding: 24px 24px 0 24px;
+  border-bottom: 1px solid #e3e3e3;
+}
+
+.calendar-modal-title {
+  margin: 0 0 16px 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #67509c;
+}
+
+.calendar-modal-content {
+  padding: 24px;
+}
+
+.calendar-modal-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.calendar-modal-info-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.calendar-modal-label {
+  font-weight: 600;
+  color: #1976d2;
+  font-size: 0.95rem;
+}
+
+.calendar-modal-value {
+  color: #333;
+  font-size: 1rem;
+}
+
+.calendar-modal-footer {
+  padding: 16px 24px 24px 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* 버튼 스타일 */
+.calendar-btn {
+  background: #67509c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.calendar-btn:hover {
+  background: #5a4389;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(103, 80, 156, 0.3);
+}
+
+.calendar-btn-secondary {
+  background: #1976d2;
+  color: #fff;
+}
+
+.calendar-btn-secondary:hover {
+  background: #1565c0;
+}
+
+.calendar-btn-outline {
+  background: transparent;
+  color: #67509c;
+  border: 2px solid #67509c;
+}
+
+.calendar-btn-outline:hover {
+  background: #67509c;
+  color: #fff;
+}
+
+/* 빈 상태 */
+.calendar-empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: #666;
+}
+
+.calendar-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.calendar-empty-message {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+}
+
+.calendar-empty-description {
+  font-size: 0.95rem;
+  color: #888;
+}
+
+.fc-button-group{
+    gap: 0.5rem;
+}
+
+/* 애니메이션 */
+@keyframes calendar-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes calendar-modal-slide-up {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) translateY(0);
+  }
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+  .calendar-container {
+    padding: 1rem;
+  }
+  
+  .calendar-card {
+    margin: 16px auto;
+    padding: 16px 20px;
+  }
+  
+  .calendar-modal {
+    width: 95%;
+    margin: 20px;
+  }
+  
+  .calendar-modal-content {
+    padding: 16px;
+  }
+  
+  .calendar-schedule-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .fc-toolbar {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  
+  .fc-toolbar-chunk {
+    display: flex !important;
+    justify-content: center !important;
+  }
+  
+  .fc-button-group {
+    display: flex !important;
+  }
+  
+  .fc-button-primary {
+    padding: 6px 12px !important;
+    font-size: 0.9rem !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .calendar-modal-footer {
+    flex-direction: column;
+  }
+  
+  .calendar-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}

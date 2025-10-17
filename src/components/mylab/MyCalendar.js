@@ -3,6 +3,7 @@ import FullCalendar from "@fullcalendar/react";
 import { useCallback, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../../api";
+import "../../styles/Calendar.css";
 
 function MyCalendar() {
 	console.log("--- [1] MyCalendar 컴포넌트 렌더링 ---");
@@ -78,112 +79,131 @@ function MyCalendar() {
 	const displayTime = (timeStr) => (timeStr ? timeStr.substring(0, 5) : "");
 
 	return (
-		<div style={{ padding: "20px" }}>
-			<h1>면접 일정</h1>
-			<FullCalendar
-				plugins={[dayGridPlugin]}
-				initialView="dayGridMonth"
-				events={events}
-				datesSet={handleDatesSet}
-				eventClick={handleEventClick}
-				eventDisplay="block"
-			/>
+		<div className="calendar-container">
+			<div className="calendar-card">
+				<div className="calendar-header">
+					<h1 className="calendar-title">📅 면접 일정</h1>
+				</div>
+				
+				<FullCalendar
+					plugins={[dayGridPlugin]}
+					initialView="dayGridMonth"
+					events={events}
+					datesSet={handleDatesSet}
+					eventClick={handleEventClick}
+					eventDisplay="block"
+					height="auto"
+					headerToolbar={{
+						left: 'prev,next today',
+						center: 'title',
+						right: 'dayGridMonth'
+					}}
+				/>
+			</div>
 
-			<div style={{ marginTop: "30px" }}>
-				<h2>현재 월의 일정 목록</h2>
+			<div className="calendar-card">
+				<h2 className="calendar-subtitle">📋 현재 월의 일정 목록</h2>
 				{scheduleList.length > 0 ? (
-					<ul style={{ listStyleType: "none", padding: 0 }}>
+					<ul className="calendar-schedule-list">
 						{scheduleList.map((schedule) => (
 							<li
 								key={schedule.id}
-								style={{
-									border: "1px solid #eee",
-									padding: "10px",
-									marginBottom: "10px",
-									borderRadius: "5px",
+								className="calendar-schedule-item"
+								onClick={() => {
+									// 일정 항목 클릭 시 상세 정보 조회
+									handleEventClick({ event: { id: schedule.interviewId } });
 								}}
 							>
-								<strong>{schedule.title || "(제목 없음)"}</strong>
-								<div style={{ fontSize: "0.9em", color: "#555" }}>
-									<span>📅 {schedule.eventDate}</span>
-									<span style={{ marginLeft: "15px" }}>
-										🕒 {displayTime(schedule.startTime)} ~{" "}
-										{displayTime(schedule.endTime)}
-									</span>
+								<div className="calendar-schedule-title">
+									{schedule.title || "(제목 없음)"}
+								</div>
+								<div className="calendar-schedule-meta">
+									<div className="calendar-schedule-date">
+										<span>📅</span>
+										<span>{schedule.eventDate}</span>
+									</div>
+									<div className="calendar-schedule-time">
+										<span>🕒</span>
+										<span>
+											{displayTime(schedule.startTime)} ~ {displayTime(schedule.endTime)}
+										</span>
+									</div>
 								</div>
 							</li>
 						))}
 					</ul>
 				) : (
-					<p>현재 월에 예정된 면접 일정이 없습니다.</p>
+					<div className="calendar-empty-state">
+						<div className="calendar-empty-icon">📅</div>
+						<div className="calendar-empty-message">현재 월에 예정된 면접 일정이 없습니다</div>
+						<div className="calendar-empty-description">
+							새로운 면접 일정을 추가해보세요
+						</div>
+					</div>
 				)}
 			</div>
 
 			{selectedEvent && (
-				<>
+				<div
+					className="calendar-modal-overlay"
+					onClick={() => {
+						console.log("--- [4] 팝업 닫기 ---");
+						setSelectedEvent(null);
+					}}
+				>
 					<div
-						style={{
-							position: "fixed",
-							top: 0,
-							left: 0,
-							right: 0,
-							bottom: 0,
-							backgroundColor: "rgba(0, 0, 0, 0.5)",
-							zIndex: 99,
-						}}
-						onClick={() => {
-							console.log("--- [4] 팝업 닫기 ---");
-							setSelectedEvent(null);
-						}}
-					/>
-					<div
-						style={{
-							position: "fixed",
-							top: "50%",
-							left: "50%",
-							transform: "translate(-50%, -50%)",
-							width: "90%",
-							maxWidth: "500px",
-							background: "white",
-							padding: "20px",
-							borderRadius: "10px",
-							boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
-							zIndex: 100,
-						}}
+						className="calendar-modal"
+						onClick={(e) => e.stopPropagation()}
 					>
-						<h2>일정 상세 정보</h2>
-						<p>
-							<strong>제목:</strong> {selectedEvent.title || "(제목 없음)"}
-						</p>
-						<p>
-							<strong>설명:</strong> {selectedEvent.description || "내용 없음"}
-						</p>
-						<p>
-							<strong>날짜:</strong> {selectedEvent.eventDate}
-						</p>
-						<p>
-							<strong>시간:</strong>
-							{` ${displayTime(selectedEvent.startTime)} ~ ${displayTime(
-								selectedEvent.endTime
-							)}`}
-						</p>
-						<button
-							style={{
-								marginTop: "10px",
-								padding: "8px 15px",
-								border: "none",
-								borderRadius: "5px",
-								cursor: "pointer",
-							}}
-							onClick={() => {
-								console.log("--- [4] 팝업 닫기 ---");
-								setSelectedEvent(null);
-							}}
-						>
-							닫기
-						</button>
+						<div className="calendar-modal-header">
+							<h2 className="calendar-modal-title">📋 일정 상세 정보</h2>
+						</div>
+						
+						<div className="calendar-modal-content">
+							<div className="calendar-modal-info-grid">
+								<div className="calendar-modal-info-row">
+									<span className="calendar-modal-label">제목</span>
+									<span className="calendar-modal-value">
+										{selectedEvent.title || "(제목 없음)"}
+									</span>
+								</div>
+								
+								<div className="calendar-modal-info-row">
+									<span className="calendar-modal-label">설명</span>
+									<span className="calendar-modal-value">
+										{selectedEvent.description || "내용 없음"}
+									</span>
+								</div>
+								
+								<div className="calendar-modal-info-row">
+									<span className="calendar-modal-label">날짜</span>
+									<span className="calendar-modal-value">
+										📅 {selectedEvent.eventDate}
+									</span>
+								</div>
+								
+								<div className="calendar-modal-info-row">
+									<span className="calendar-modal-label">시간</span>
+									<span className="calendar-modal-value">
+										🕒 {displayTime(selectedEvent.startTime)} ~ {displayTime(selectedEvent.endTime)}
+									</span>
+								</div>
+							</div>
+						</div>
+						
+						<div className="calendar-modal-footer">
+							<button
+								className="calendar-btn calendar-btn-outline"
+								onClick={() => {
+									console.log("--- [4] 팝업 닫기 ---");
+									setSelectedEvent(null);
+								}}
+							>
+								닫기
+							</button>
+						</div>
 					</div>
-				</>
+				</div>
 			)}
 		</div>
 	);

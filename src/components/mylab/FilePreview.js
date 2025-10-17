@@ -20,7 +20,7 @@ function FilePreview() {
   const navigate = useNavigate();
 
   return (
-    <div className="mylab-card">
+    <div className="mainlab-card">
       <div className="mylab-card-title">📁 최근 자료</div>
       <ul style={{ padding: 0, listStyle: "none" }}>
         {dummyFiles.map((file) => (

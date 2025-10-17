@@ -1,0 +1,86 @@
+/* schedule.css - 랩실 일정(달력/일정 생성) 스타일 */
+
+.schedule-create-form {
+  background: #f7faff;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  padding: 2rem 1.5rem;
+  margin: 1.5rem 0;
+  max-width: 420px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #e3e3e3;
+}
+.schedule-create-form h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1.2rem;
+  color: #67509c;
+  font-weight: 700;
+}
+.schedule-create-form input[type="text"],
+.schedule-create-form textarea,
+.schedule-create-form input[type="date"],
+.schedule-create-form select {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f9fafb;
+  transition: border 0.2s;
+}
+.schedule-create-form input:focus,
+.schedule-create-form textarea:focus,
+.schedule-create-form select:focus {
+  border-color: #67509c;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(103, 80, 156, 0.1);
+}
+.schedule-create-form label {
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  display: block;
+  color: #1976d2;
+  font-size: 0.95rem;
+}
+.schedule-create-form button[type="submit"] {
+  background: #67509c;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.schedule-create-form button[type="submit"]:hover {
+  background: #5a4389;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(103, 80, 156, 0.3);
+}
+.schedule-create-form button[type="button"] {
+  background: transparent;
+  color: #67509c;
+  border: 2px solid #67509c;
+  border-radius: 8px;
+  padding: 10px 22px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.schedule-create-form button[type="button"]:hover {
+  background: #67509c;
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(103, 80, 156, 0.3);
+}

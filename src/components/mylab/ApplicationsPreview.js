@@ -276,7 +276,7 @@ export default function ApplicationsPreview({ labId }) {
 		<>
 			{/* 카드 (미리보기 5명, 클릭 시 모달 오픈) */}
 			<div
-				className="mylab-card"
+				className="mainlab-card"
 				onClick={() => {
 					if (canOpen) setOpen(true);
 				}}

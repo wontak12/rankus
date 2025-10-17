@@ -15,7 +15,7 @@ function MemberSection({ labId }) {
   const previewMembers = initialMembers.slice(0, 3);
 
   return (
-    <div className="mylab-card">
+    <div className="mainlab-card">
       <div className="mylab-card-title">멤버 목록</div>
       <div className="mylab-card-content">
         <ul className="member-list" style={{ padding: 0, margin: 0 }}>

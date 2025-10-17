@@ -74,7 +74,7 @@ function NoticePreview({ labId }) {
 	}, [labId]);
 
 	return (
-		<div className="mylab-card">
+		<div className="mainlab-card">
 			<div className="mylab-card-title">📢 공지사항</div>
 			<ul style={{ padding: 0, listStyle: "none" }}>
 				{notices.length > 0 ? (

@@ -2,6 +2,7 @@ import { QRCodeSVG as QRCode } from "qrcode.react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import api from "../../api";
+import "../../styles/Attendance.css";
 
 function Attendance() {
 	// --- 기존 코드 부분 (관리자 화면용) ---
@@ -209,146 +210,234 @@ function Attendance() {
 
 	if (qrToken) {
 		return (
-			<div style={{ padding: "2rem", textAlign: "center", fontSize: "1.2rem" }}>
-				<h1>출석 체크</h1>
-				{attendLoading && <p>출석 정보를 확인하는 중입니다...</p>}
-				{attendError && <p style={{ color: "red" }}>{attendError}</p>}
-				{attendSuccess && <p style={{ color: "green" }}>{attendSuccess}</p>}
+			<div className="attendance-check-container">
+				<div className="attendance-check-icon">✅</div>
+				<h1 className="attendance-check-title">출석 체크</h1>
+				{attendLoading && (
+					<div className="attendance-loading">출석 정보를 확인하는 중입니다...</div>
+				)}
+				{attendError && (
+					<div className="attendance-message attendance-message-error">
+						{attendError}
+					</div>
+				)}
+				{attendSuccess && (
+					<div className="attendance-message attendance-message-success">
+						{attendSuccess}
+					</div>
+				)}
 			</div>
 		);
 	}
 
 	const renderDetailView = () => {
-		if (detailLoading) return <div>세부 정보 로딩 중...</div>;
-		if (!sessionDetails) return <div>세션 정보를 찾을 수 없습니다.</div>;
+		if (detailLoading) return (
+			<div className="attendance-loading">세부 정보를 불러오는 중...</div>
+		);
+		if (!sessionDetails) return (
+			<div className="attendance-empty-state">
+				<div className="attendance-empty-icon">📋</div>
+				<div className="attendance-empty-message">세션 정보를 찾을 수 없습니다.</div>
+			</div>
+		);
+		
 		return (
-			<div>
-				<button onClick={() => setSelectedSessionId(null)}>
-					← 목록으로 돌아가기
-				</button>
-				<hr />
-				<h1>세션 상세 정보</h1>
-				<p>
-					<strong>세션 제목:</strong> {sessionDetails.title}
-				</p>
-				<p>
-					<strong>상태:</strong> {sessionDetails.status}
-				</p>
-				<p>
-					<strong>생성일:</strong>{" "}
-					{new Date(sessionDetails.createdAt).toLocaleString("ko-KR")}
-				</p>
-				<p>
-					<strong>QR 유효시간:</strong> {sessionDetails.qrValidityMinutes}분
-				</p>
-				<hr />
-				<h2>QR 코드 생성</h2>
-				<button
-					onClick={handleGenerateQr}
-					disabled={isQrLoading || sessionDetails.status !== "ACTIVE"}
-				>
-					{isQrLoading ? "생성 중..." : "QR 코드 생성하기"}
-				</button>
-				{detailError && (
-					<div style={{ color: "red", marginTop: "10px" }}>{detailError}</div>
-				)}
-				{qrCodeData && (
-					<div style={{ marginTop: "1rem" }}>
-						<QRCode value={qrCodeData} size={256} />
-						<p
-							style={{
-								wordBreak: "break-all",
-								marginTop: "10px",
-								fontSize: "12px",
-							}}
-						>
-							<strong>QR 값:</strong> {qrCodeData}
-						</p>
+			<div className="attendance-card">
+				<div className="attendance-header">
+					<button 
+						className="attendance-btn attendance-btn-outline"
+						onClick={() => setSelectedSessionId(null)}
+					>
+						← 목록으로 돌아가기
+					</button>
+				</div>
+				
+				<h1 className="attendance-title">📋 세션 상세 정보</h1>
+				
+				<div className="attendance-card-small">
+					<div className="attendance-form-grid">
+						<div className="attendance-form-row">
+							<div className="attendance-form-group">
+								<span className="attendance-form-label">세션 제목</span>
+								<span>{sessionDetails.title}</span>
+							</div>
+							<div className="attendance-form-group">
+								<span className="attendance-form-label">상태</span>
+								<span className={`attendance-status-badge ${
+									sessionDetails.status === 'ACTIVE' ? 'attendance-status-active' :
+									sessionDetails.status === 'COMPLETED' ? 'attendance-status-completed' :
+									'attendance-status-inactive'
+								}`}>
+									{sessionDetails.status}
+								</span>
+							</div>
+						</div>
+						<div className="attendance-form-row">
+							<div className="attendance-form-group">
+								<span className="attendance-form-label">생성일</span>
+								<span>{new Date(sessionDetails.createdAt).toLocaleString("ko-KR")}</span>
+							</div>
+							<div className="attendance-form-group">
+								<span className="attendance-form-label">QR 유효시간</span>
+								<span>{sessionDetails.qrValidityMinutes}분</span>
+							</div>
+						</div>
 					</div>
-				)}
+				</div>
+
+				<div className="attendance-qr-section">
+					<h2 className="attendance-subtitle">QR 코드 생성</h2>
+					<button
+						className={`attendance-btn ${sessionDetails.status !== "ACTIVE" ? 'attendance-btn-secondary' : ''}`}
+						onClick={handleGenerateQr}
+						disabled={isQrLoading || sessionDetails.status !== "ACTIVE"}
+					>
+						{isQrLoading ? "⏳ 생성 중..." : "📱 QR 코드 생성하기"}
+					</button>
+					
+					{detailError && (
+						<div className="attendance-message attendance-message-error">
+							{detailError}
+						</div>
+					)}
+					
+					{qrCodeData && (
+						<div className="attendance-qr-container">
+							<QRCode value={qrCodeData} size={256} />
+							<div className="attendance-qr-info">
+								<strong>QR 값:</strong> {qrCodeData}
+							</div>
+						</div>
+					)}
+				</div>
 			</div>
 		);
 	};
 
 	const renderListView = () => (
-		<div>
-			<div
-				style={{
-					marginBottom: "40px",
-					paddingBottom: "20px",
-					borderBottom: "2px solid #eee",
-				}}
-			>
-				<h2>새 출석 세션 생성</h2>
-				<form onSubmit={handleCreateSubmit}>
-					<div>
-						<label htmlFor="title">세션 제목: </label>
-						<input
-							id="title"
-							type="text"
-							value={title}
-							onChange={(e) => setTitle(e.target.value)}
-							placeholder="예: 2025-09-14 정기 미팅"
-						/>
-					</div>
-					<div style={{ margin: "10px 0" }}>
-						<label htmlFor="qrMinutes">QR 유효시간 (분): </label>
-						<input
-							id="qrMinutes"
-							type="number"
-							value={qrMinutes}
-							onChange={(e) => setQrMinutes(e.target.value)}
-							min="1"
-						/>
-					</div>
-					<button type="submit" disabled={createLoading}>
-						{createLoading ? "생성 중..." : "생성하기"}
-					</button>
-				</form>
-				{successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
-				{createError && <p style={{ color: "red" }}>{createError}</p>}
+		<div className="attendance-card">
+			<div className="attendance-header">
+				<h1 className="attendance-title">📊 출석 관리</h1>
 			</div>
-			<h1>출석 세션 목록 (Lab ID: {labId})</h1>
-			{listError && <p style={{ color: "red" }}>{listError}</p>}
-			<table>
-				<thead>
-					<tr>
-						<th>세션 ID</th>
-						<th>제목</th>
-						<th>상태</th>
-						<th>생성일</th>
-					</tr>
-				</thead>
-				<tbody>
-					{listLoading ? (
-						<tr>
-							<td colSpan="4">목록 로딩 중...</td>
-						</tr>
-					) : sessions.length > 0 ? (
-						sessions.map((session) => (
-							<tr
-								key={session.sessionId}
-								onClick={() => setSelectedSessionId(session.sessionId)}
-								style={{ cursor: "pointer" }}
+
+			{/* 새 출석 세션 생성 폼 */}
+			<div className="attendance-form">
+				<h2 className="attendance-subtitle">새 출석 세션 생성</h2>
+				<form onSubmit={handleCreateSubmit}>
+					<div className="attendance-form-grid">
+						<div className="attendance-form-row">
+							<div className="attendance-form-group">
+								<label htmlFor="title" className="attendance-form-label">
+									세션 제목
+								</label>
+								<input
+									id="title"
+									type="text"
+									className="attendance-form-input"
+									value={title}
+									onChange={(e) => setTitle(e.target.value)}
+									placeholder="예: 2025-10-16 정기 미팅"
+									required
+								/>
+							</div>
+							<div className="attendance-form-group">
+								<label htmlFor="qrMinutes" className="attendance-form-label">
+									QR 유효시간 (분)
+								</label>
+								<input
+									id="qrMinutes"
+									type="number"
+									className="attendance-form-input"
+									value={qrMinutes}
+									onChange={(e) => setQrMinutes(e.target.value)}
+									min="1"
+									max="60"
+									required
+								/>
+							</div>
+						</div>
+						<div className="attendance-form-row">
+							<button 
+								type="submit" 
+								className="attendance-btn"
+								disabled={createLoading}
 							>
-								<td>{session.sessionId}</td>
-								<td>{session.title}</td>
-								<td>{session.status}</td>
-								<td>{new Date(session.createdAt).toLocaleString("ko-KR")}</td>
+								{createLoading ? "⏳ 생성 중..." : "✨ 생성하기"}
+							</button>
+						</div>
+					</div>
+				</form>
+				
+				{successMessage && (
+					<div className="attendance-message attendance-message-success">
+						{successMessage}
+					</div>
+				)}
+				{createError && (
+					<div className="attendance-message attendance-message-error">
+						{createError}
+					</div>
+				)}
+			</div>
+
+			{/* 출석 세션 목록 */}
+			<div>
+				<h2 className="attendance-subtitle">📋 출석 세션 목록</h2>
+				{listError && (
+					<div className="attendance-message attendance-message-error">
+						{listError}
+					</div>
+				)}
+				
+				{listLoading ? (
+					<div className="attendance-loading">목록을 불러오는 중...</div>
+				) : sessions.length > 0 ? (
+					<table className="attendance-table">
+						<thead>
+							<tr>
+								<th>세션 ID</th>
+								<th>제목</th>
+								<th>상태</th>
+								<th>생성일</th>
 							</tr>
-						))
-					) : (
-						<tr>
-							<td colSpan="4">데이터가 없습니다.</td>
-						</tr>
-					)}
-				</tbody>
-			</table>
+						</thead>
+						<tbody>
+							{sessions.map((session) => (
+								<tr
+									key={session.sessionId}
+									onClick={() => setSelectedSessionId(session.sessionId)}
+								>
+									<td>#{session.sessionId}</td>
+									<td>{session.title}</td>
+									<td>
+										<span className={`attendance-status-badge ${
+											session.status === 'ACTIVE' ? 'attendance-status-active' :
+											session.status === 'COMPLETED' ? 'attendance-status-completed' :
+											'attendance-status-inactive'
+										}`}>
+											{session.status}
+										</span>
+									</td>
+									<td>{new Date(session.createdAt).toLocaleString("ko-KR")}</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				) : (
+					<div className="attendance-empty-state">
+						<div className="attendance-empty-icon">📝</div>
+						<div className="attendance-empty-message">아직 생성된 출석 세션이 없습니다</div>
+						<div className="attendance-empty-description">
+							위의 폼을 사용하여 첫 번째 출석 세션을 생성해보세요
+						</div>
+					</div>
+				)}
+			</div>
 		</div>
 	);
 
 	return (
-		<div style={{ padding: "2rem" }}>
+		<div className="attendance-container">
 			{selectedSessionId ? renderDetailView() : renderListView()}
 		</div>
 	);
