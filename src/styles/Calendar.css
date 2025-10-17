@@ -3,33 +3,33 @@
 /* 메인 컨테이너 */
 .calendar-container {
   padding: 2rem;
-  max-width: 1200px;
+  max-width: 120rem;
   margin: 0 auto;
 }
 
 /* 캘린더 카드 스타일 */
 .calendar-card {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  margin: 0px auto;
-  padding: 24px 32px;
+  border-radius: 1.6rem;
+  box-shadow: 0 0.4rem 1.6rem rgba(0, 0, 0, 0.08);
+  margin: 0 auto;
+  padding: 2.4rem 3.2rem;
 }
 
 .calendar-card-small {
   background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-  margin: 16px 0;
-  padding: 20px 24px;
+  border-radius: 1.6rem;
+  box-shadow: 0 0.4rem 1.6rem rgba(0, 0, 0, 0.08);
+  margin: 1.6rem 0;
+  padding: 2rem 2.4rem;
 }
 
 /* 헤더 영역 */
 .calendar-header {
   display: flex;
-  gap: 12px;
+  gap: 1.2rem;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 2.4rem;
 }
 
 .calendar-title {
@@ -40,7 +40,7 @@
 }
 
 .calendar-subtitle {
-  margin: 0 0 16px 0;
+  margin: 0 0 1.6rem 0;
   font-size: 1.2rem;
   font-weight: 600;
   color: #1976d2;
@@ -65,17 +65,17 @@
   background-color: #67509c !important;
   border-color: #67509c !important;
   color: white !important;
-  border-radius: 8px !important;
+  border-radius: 0.8rem !important;
   font-weight: 600 !important;
-  padding: 8px 16px !important;
+  padding: 0.8rem 1.6rem !important;
   transition: all 0.2s !important;
 }
 
 .fc-button-primary:hover:not(:disabled) {
   background-color: #5a4389 !important;
   border-color: #5a4389 !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(103, 80, 156, 0.3) !important;
+  transform: translateY(-0.1rem) !important;
+  box-shadow: 0 0.4rem 1.2rem rgba(103, 80, 156, 0.3) !important;
 }
 
 .fc-button-primary:disabled {
@@ -97,7 +97,7 @@
 .fc-daygrid-day-number {
   color: #333 !important;
   font-weight: 500 !important;
-  padding: 8px !important;
+  padding: 0.8rem !important;
 }
 
 .fc-day-today {

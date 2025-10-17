@@ -106,4 +106,122 @@
   font-size: 1rem;
   outline: none;
   transition: border 0.2s;
+  background: #fff;
+  cursor: pointer;
+}
+
+.auth-form-field select:focus {
+  border: 1.5px solid #564877;
+}
+
+/* 모바일 반응형 디자인 */
+@media (max-width: 76.8rem) {
+  .signup-page,
+  .login-page {
+    padding: 1rem;
+    height: 100vh;
+    justify-content: flex-start;
+    padding-top: 10vh;
+  }
+  
+  .auth-form-root {
+    padding: 2rem 1.5rem;
+    max-width: 90%;
+    width: 100%;
+    margin: 0 1rem;
+    border-radius: 1.2rem;
+    box-shadow: 0 0.2rem 1.6rem rgba(26, 35, 126, 0.12);
+  }
+  
+  .auth-form-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .auth-form-field {
+    margin-bottom: 1rem;
+  }
+  
+  .auth-form-field label {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .auth-form-field input,
+  .auth-form-field select {
+    padding: 0.8rem 1rem;
+    font-size: 1rem;
+    border-radius: 1rem;
+  }
+  
+  .auth-form-btn {
+    padding: 1rem 0;
+    font-size: 1rem;
+    border-radius: 1.5rem;
+    margin-top: 0.8rem;
+  }
+  
+  .auth-form-link {
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  
+  .auth-form-error {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* 작은 모바일 디바이스 */
+@media (max-width: 48rem) {
+  .signup-page,
+  .login-page {
+    padding: 0.5rem;
+    padding-top: 8vh;
+  }
+  
+  .auth-form-root {
+    padding: 1.5rem 1rem;
+    max-width: 95%;
+    border-radius: 1rem;
+  }
+  
+  .auth-form-title {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+  }
+  
+  .auth-form-field {
+    margin-bottom: 0.8rem;
+  }
+  
+  .auth-form-field input,
+  .auth-form-field select {
+    padding: 0.7rem 0.8rem;
+    font-size: 0.95rem;
+  }
+  
+  .auth-form-btn {
+    padding: 0.9rem 0;
+    font-size: 0.95rem;
+    margin-top: 0.6rem;
+  }
+}
+
+/* 매우 작은 디바이스 (갤럭시 폴드 등) */
+@media (max-width: 32rem) {
+  .auth-form-root {
+    padding: 1.2rem 0.8rem;
+    margin: 0 0.5rem;
+  }
+  
+  .auth-form-title {
+    font-size: 1.4rem;
+  }
+  
+  .auth-form-field input,
+  .auth-form-field select {
+    padding: 0.6rem 0.7rem;
+    font-size: 0.9rem;
+  }
 }
